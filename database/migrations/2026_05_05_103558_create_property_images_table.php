@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('property_images', function (Blueprint $table) {
           $table->id();
           $table->foreignId('property_id')->constrained()->cascadeOnDelete();
-          $table->string('path');
+          $table->text('path');
           $table->boolean('is_featured')->default(false);
           $table->integer('sort_order')->default(0);
           $table->timestamps();

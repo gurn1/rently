@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('property_manager_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('key_features')->nullable();
@@ -22,11 +22,11 @@ return new class extends Migration
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
             $table->decimal('price', 10, 2);
-            $table->string('property_type');
+            $table->enum('property_type', ['house', 'apartment', 'studio', 'commercial']);
             $table->unsignedTinyInteger('bedrooms');
             $table->unsignedTinyInteger('bathrooms');
             $table->integer('size')->nullable();
-            $table->string('availability_status');
+            $table->enum('availability_status', ['available', 'occupied', 'under_maintenance']);
             $table->timestamps();
         });
         

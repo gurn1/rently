@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('leases', function (Blueprint $table) {
           $table->id();
-          $table->foreignId('property_id')->constrained();
-          $table->foreignId('tenant_id')->constrained();
+          $table->foreignId('property_id')->constrained()->restrictOnDelete();
+          $table->foreignId('tenant_id')->constrained('users');
           $table->enum('status', ['pending', 'active', 'ended', 'terminated'])->default('pending');
           $table->decimal('rent_amount', 10, 2);
           $table->date('start_date');
           $table->date('end_date')->nullable();
+          $table->timestamp('terminated_at')->nullable();
+          $table->text('termination_notes')->nullable();
           $table->timestamps();
         });
     }
