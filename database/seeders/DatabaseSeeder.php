@@ -20,6 +20,11 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             AmenitySeeder::class,
             PropertySeeder::class,
+            AmenityPropertySeeder::class,
+            LeaseSeeder::class,
+            DocumentSeeder::class,
+            WorkOrderSeeder::class,
+            MessageSeeder::class,
         ]);
     }
 }
