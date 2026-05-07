@@ -28,6 +28,8 @@
    - [notifications](#notifications)
    - [payments](#payments)
 5. [Key Design Decisions](#key-design-decisions)
+6. [Eloquent Models & Relationships](#eloquent-models--relationships)
+7. [Route & Middleware Structure](#route--middleware-structure)
 
 ---
 
@@ -378,3 +380,223 @@ Planned links: `lease_id`, `tenant_id`, payment gateway reference, amount, statu
 | `document_type` as string (not enum yet) | Types not fully defined yet — convert to enum once finalised. |
 | Laravel built-in notifications table | Integrates with `Notifiable` trait, supports multiple channels out of the box. |
 | Spatie Laravel Permission for roles | Battle-tested, widely supported, clean API (`assignRole`, `hasRole`). |
+
+---
+
+## Eloquent Models & Relationships
+
+### Overview
+
+Each model maps to a database table and defines its relationships to other models. Laravel infers the table name from the class name automatically (e.g. `WorkOrder` → `work_orders`).
+
+Where a foreign key uses a non-standard column name (e.g. `tenant_id`, `raised_by`), the table is passed explicitly to `belongsTo()` to avoid Laravel guessing incorrectly.
+
+---
+
+### User
+**File:** `app/Models/User.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `properties()` | hasMany Property | As property manager |
+| `leases()` | hasMany Lease | As tenant |
+| `profile()` | hasOne UserProfile | |
+| `tenants()` | belongsToMany User | Via `property_manager_tenant` pivot |
+| `propertyManager()` | belongsToMany User | Via `property_manager_tenant` pivot |
+
+```php
+// Usage examples
+$user->properties;        // all properties managed by this user
+$user->leases;            // all leases for this tenant
+$user->profile;           // user's profile
+$user->tenants;           // tenants assigned to this manager
+$user->propertyManager;   // manager assigned to this tenant
+```
+
+---
+
+### UserProfile
+**File:** `app/Models/UserProfile.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `user()` | belongsTo User | |
+
+---
+
+### Property
+**File:** `app/Models/Property.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `propertyManager()` | belongsTo User | Via `property_manager_id` |
+| `images()` | hasMany PropertyImage | |
+| `leases()` | hasMany Lease | |
+| `workOrders()` | hasMany WorkOrder | |
+| `amenities()` | belongsToMany Amenity | Via `amenity_property` pivot |
+
+```php
+// Usage examples
+$property->propertyManager;  // the manager who owns this property
+$property->images;           // all images for this property
+$property->amenities;        // all amenities attached to this property
+$property->leases;           // all leases for this property
+```
+
+---
+
+### PropertyImage
+**File:** `app/Models/PropertyImage.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `property()` | belongsTo Property | |
+
+---
+
+### Amenity
+**File:** `app/Models/Amenity.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `properties()` | belongsToMany Property | Via `amenity_property` pivot |
+
+```php
+// Usage example
+$amenity->properties;  // all properties with this amenity
+```
+
+---
+
+### Lease
+**File:** `app/Models/Lease.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `property()` | belongsTo Property | |
+| `tenant()` | belongsTo User | Via `tenant_id` |
+| `documents()` | hasMany Document | |
+| `workOrders()` | hasMany WorkOrder | |
+
+```php
+// Usage examples
+$lease->tenant;     // the tenant on this lease
+$lease->property;   // the property this lease is for
+$lease->documents;  // all documents linked to this lease
+```
+
+---
+
+### Document
+**File:** `app/Models/Document.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `uploadedBy()` | belongsTo User | Via `uploaded_by` |
+| `tenant()` | belongsTo User | Via `tenant_id` |
+| `lease()` | belongsTo Lease | Nullable |
+| `property()` | belongsTo Property | Nullable |
+
+---
+
+### WorkOrder
+**File:** `app/Models/WorkOrder.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `property()` | belongsTo Property | |
+| `lease()` | belongsTo Lease | Nullable |
+| `raisedBy()` | belongsTo User | Via `raised_by` |
+| `assignedTo()` | belongsTo User | Via `assigned_to`, nullable |
+| `updates()` | hasMany WorkOrderUpdate | |
+
+```php
+// Usage examples
+$workOrder->raisedBy;   // user who raised the work order
+$workOrder->assignedTo; // user assigned to action it
+$workOrder->updates;    // all updates/comments on this work order
+```
+
+---
+
+### WorkOrderUpdate
+**File:** `app/Models/WorkOrderUpdate.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `workOrder()` | belongsTo WorkOrder | |
+| `user()` | belongsTo User | |
+
+---
+
+### Conversation
+**File:** `app/Models/Conversation.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `tenant()` | belongsTo User | Via `tenant_id` |
+| `propertyManager()` | belongsTo User | Via `property_manager_id` |
+| `messages()` | hasMany Message | |
+| `latestMessage()` | hasMany Message | Ordered by latest, limit 1. Used for inbox previews. |
+
+```php
+// Usage examples
+$conversation->messages;       // all messages in this conversation
+$conversation->latestMessage;  // most recent message for inbox preview
+```
+
+---
+
+### Message
+**File:** `app/Models/Message.php`
+
+| Relationship | Type | Notes |
+|---|---|---|
+| `conversation()` | belongsTo Conversation | |
+| `sender()` | belongsTo User | Via `sender_id` |
+
+---
+
+## Route & Middleware Structure
+
+### Authentication
+Handled by **Laravel Breeze**. Routes defined in `routes/auth.php`.
+
+After login, users are redirected to their role-specific dashboard via the `AuthenticatedSessionController`.
+
+### Role-based Redirects
+
+| Role | Redirect |
+|------|---------|
+| `admin` | `/admin/dashboard` |
+| `property_manager` | `/manager/dashboard` |
+| `tenant` | `/tenant/dashboard` |
+
+### Route Groups
+
+Routes are grouped by role using Spatie's `role` middleware:
+
+| Middleware | Prefix | Route Name Prefix |
+|---|---|---|
+| `auth, role:tenant` | `/tenant` | `tenant.` |
+| `auth, role:property_manager` | `/manager` | `manager.` |
+| `auth, role:admin` | `/admin` | `admin.` |
+
+### Naming Convention
+
+Routes follow Laravel's named route convention:
+
+```php
+// Examples
+route('tenant.dashboard')   // → /tenant/dashboard
+route('manager.dashboard')  // → /manager/dashboard
+route('admin.dashboard')    // → /admin/dashboard
+```
+
+### Dashboard Views
+
+| Role | View Path |
+|------|----------|
+| Tenant | `resources/views/tenant/dashboard.blade.php` |
+| Property Manager | `resources/views/manager/dashboard.blade.php` |
+| Admin | `resources/views/admin/dashboard.blade.php` |
