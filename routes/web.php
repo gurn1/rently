@@ -59,6 +59,10 @@ Route::middleware(['auth', 'role:property_manager'])
         Route::get('/dashboard', function () {
             return view('manager.dashboard');
         })->name('dashboard');
+
+        Route::resource('properties', PropertyController::class)
+            ->except(['index', 'show'])
+            ->names('properties');
 });
 
 /**
@@ -73,8 +77,12 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('dashboard');
+
+        Route::resource('properties', PropertyController::class)
+            ->names('properties');
 });
 
 /** Listings routes */
-Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
-Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
+// Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
+// Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
+Route::resource('properties', PropertyController::class)->only(['index', 'show']);

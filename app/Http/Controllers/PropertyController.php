@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Amenity;
+use App\Models\Property;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PropertyController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $properties = Property::with(['images', 'amenities'])
+            ->latest()
+            ->paginate(12);
+
+        return view('properties.index', compact('properties'));
     }
 
     /**
@@ -19,7 +27,10 @@ class PropertyController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('create', Property::class);
+        $amenities = Amenity::orderBy('name', 'asc')->get();
+
+        return view('properties.create', compact('amenties'));
     }
 
     /**
@@ -27,38 +38,103 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Property::class);
+
+        $validated = $request->validate([
+            'title'               => 'required|string|max:255',
+            'description'         => 'required|string',
+            'key_features'        => 'nullable|string',
+            'address'             => 'required|string|max:255',
+            'latitude'            => 'nullable|numeric',
+            'longitude'           => 'nullable|numeric',
+            'price'               => 'required|numeric|min:0',
+            'property_type'       => 'required|in:house,apartment,studio,commercial',
+            'bedrooms'            => 'required|integer|min:0',
+            'bathrooms'           => 'required|integer|min:0',
+            'size'                => 'nullable|integer|min:0',
+            'availability_status' => 'required|in:available,occupied,under_maintenance',
+            'amenities'           => 'nullable|array',
+            'amenities.*'         => 'exists:amenities,id',
+        ]);
+
+        $validated['slug'] = Str::slug($validated['title']);
+        $validated['property_manager_id'] = auth()->id();
+
+        $property = Property::create($validated);
+
+        if (!empty($validated['amenities'])) {
+            $property->amenities()->attach($validated['amenities']);
+        }
+
+        return redirect()->route('manager.properties.index')
+            ->with('success', 'Property created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Property $property)
     {
-        //
+        $this->authorize('view', $property);
+        $property->load(['images', 'amenities', 'propertyManager']);
+
+        return view('properties.show', compact('property'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Property $property)
     {
-        //
+        $this->authorize('update', $property);
+        $amenities = Amenity::orderBy('name', 'asc')->get();
+
+        return view('properties.edit', compact('property', 'amenities'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Property $property)
     {
-        //
+        $this->authorize('update', $property);
+
+        $validated = $request->validate([
+            'title'               => 'required|string|max:255',
+            'description'         => 'required|string',
+            'key_features'        => 'nullable|string',
+            'address'             => 'required|string|max:255',
+            'latitude'            => 'nullable|numeric',
+            'longitude'           => 'nullable|numeric',
+            'price'               => 'required|numeric|min:0',
+            'property_type'       => 'required|in:house,apartment,studio,commercial',
+            'bedrooms'            => 'required|integer|min:0',
+            'bathrooms'           => 'required|integer|min:0',
+            'size'                => 'nullable|integer|min:0',
+            'availability_status' => 'required|in:available,occupied,under_maintenance',
+            'amenities'           => 'nullable|array',
+            'amenities.*'         => 'exists:amenities,id',
+        ]);
+
+        $validated['slug'] = Str::slug($validated['title']);
+
+        $property->update($validated);
+
+        $property->amenities()->sync($validated['amenities'] ?? []);
+
+        return redirect()->route('manager.properties.index')
+            ->with('success', 'Property updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Property $property)
     {
-        //
+        $this->authorize('delete', $property);
+        $property->delete();
+
+        return redirect()->route('manager.properties.index')
+            ->with('success', 'Property deleted successfully.');
     }
 }
