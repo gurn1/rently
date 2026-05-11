@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
 
+use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use App\Models\Property;
 use Illuminate\Http\Request;
@@ -9,17 +10,17 @@ use Illuminate\Support\Str;
 
 class PropertyController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $properties = Property::with(['images', 'amenities'])
+        $properties = Property::where('property_manager_id', auth()->id())
+            ->with(['images', 'amenities'])
             ->latest()
             ->paginate(12);
 
-        return view('properties.index', compact('properties'));
+        return view('dashboard.manager.properties.index', compact('properties'));
     }
 
     /**
@@ -27,10 +28,8 @@ class PropertyController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', Property::class);
         $amenities = Amenity::orderBy('name', 'asc')->get();
-
-        return view('properties.create', compact('amenities'));
+        return view('dashboard.manager.properties.create', compact('amenities'));
     }
 
     /**
@@ -38,8 +37,6 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Property::class);
-
         $validated = $request->validate([
             'title'               => 'required|string|max:255',
             'description'         => 'required|string',
@@ -76,9 +73,14 @@ class PropertyController extends Controller
     public function show(Property $property)
     {
         $this->authorize('view', $property);
-        $property->load(['images', 'amenities', 'propertyManager']);
 
-        return view('properties.show', compact('property'));
+        $property->load([
+            'images',
+            'amenities',
+            'leases.tenant',
+        ]);
+
+        return view('dashboard.manager.properties.show', compact('property'));
     }
 
     /**
@@ -89,7 +91,7 @@ class PropertyController extends Controller
         $this->authorize('update', $property);
         $amenities = Amenity::orderBy('name', 'asc')->get();
 
-        return view('properties.edit', compact('property', 'amenities'));
+        return view('dashboard.manager.properties.edit', compact('property', 'amenities'));
     }
 
     /**
@@ -117,9 +119,7 @@ class PropertyController extends Controller
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
-
         $property->update($validated);
-
         $property->amenities()->sync($validated['amenities'] ?? []);
 
         return redirect()->route('manager.properties.index')
@@ -132,7 +132,7 @@ class PropertyController extends Controller
     public function destroy(Property $property)
     {
         $this->authorize('delete', $property);
-        $property->delete();
+        Property::destroy($property->id);
 
         return redirect()->route('manager.properties.index')
             ->with('success', 'Property deleted successfully.');

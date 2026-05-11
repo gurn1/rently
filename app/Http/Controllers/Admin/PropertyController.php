@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use App\Models\Property;
 use Illuminate\Http\Request;
@@ -9,7 +10,6 @@ use Illuminate\Support\Str;
 
 class PropertyController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
@@ -19,7 +19,7 @@ class PropertyController extends Controller
             ->latest()
             ->paginate(12);
 
-        return view('properties.index', compact('properties'));
+        return view('dashboard.admin.properties.index', compact('properties'));
     }
 
     /**
@@ -27,10 +27,8 @@ class PropertyController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', Property::class);
-        $amenities = Amenity::orderBy('name', 'asc')->get();
-
-        return view('properties.create', compact('amenities'));
+        $amenities = Amenity::orderby('name', 'asc')->get();
+        return view('dashboard.admin.properties.create', compact('amenities'));
     }
 
     /**
@@ -38,8 +36,6 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Property::class);
-
         $validated = $request->validate([
             'title'               => 'required|string|max:255',
             'description'         => 'required|string',
@@ -57,8 +53,21 @@ class PropertyController extends Controller
             'amenities.*'         => 'exists:amenities,id',
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
-        $validated['property_manager_id'] = auth()->id();
+        //$validated['property_manager_id'] = auth()->id();
+
+        // Base slug 
+        $base_slug = Str::slug($validated['title']);
+        $slug = $base_slug;
+        // check for duplicates
+        $count = 2;
+
+        while (Property::where('slug', $slug)->exists()) {
+            $slug = $base_slug . '-' . $count;
+            $count++;
+        }
+
+
+        $validated['slug'] = $slug;
 
         $property = Property::create($validated);
 
@@ -66,7 +75,7 @@ class PropertyController extends Controller
             $property->amenities()->attach($validated['amenities']);
         }
 
-        return redirect()->route('manager.properties.index')
+        return redirect()->route('admin.properties.index')
             ->with('success', 'Property created successfully.');
     }
 
@@ -76,9 +85,13 @@ class PropertyController extends Controller
     public function show(Property $property)
     {
         $this->authorize('view', $property);
-        $property->load(['images', 'amenities', 'propertyManager']);
 
-        return view('properties.show', compact('property'));
+        $property->load([
+            'images',
+            'amenities'
+        ]);
+
+        return view('dashboard.admin.properties.show', compact('property'));
     }
 
     /**
@@ -89,7 +102,7 @@ class PropertyController extends Controller
         $this->authorize('update', $property);
         $amenities = Amenity::orderBy('name', 'asc')->get();
 
-        return view('properties.edit', compact('property', 'amenities'));
+        return view('dashboard.admin.properties.edit', compact('property', 'amenities'));
     }
 
     /**
@@ -117,12 +130,10 @@ class PropertyController extends Controller
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
-
         $property->update($validated);
-
         $property->amenities()->sync($validated['amenities'] ?? []);
 
-        return redirect()->route('manager.properties.index')
+        return redirect()->route('admin.properties.index')
             ->with('success', 'Property updated successfully.');
     }
 
@@ -132,9 +143,9 @@ class PropertyController extends Controller
     public function destroy(Property $property)
     {
         $this->authorize('delete', $property);
-        $property->delete();
+        Property::destroy($property->id);
 
-        return redirect()->route('manager.properties.index')
+        return redirect()->route('admin.properties.index')
             ->with('success', 'Property deleted successfully.');
     }
 }

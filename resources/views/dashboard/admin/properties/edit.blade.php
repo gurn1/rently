@@ -6,13 +6,13 @@
     <div class="max-w-3xl mx-auto">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-2xl font-bold text-gray-900">Edit Property</h1>
-            <a href="{{ route('manager.dashboard') }}"
+            <a href="{{ route('admin.dashboard') }}"
                class="text-sm text-indigo-600 hover:underline">
                 &larr; Back to dashboard
             </a>
         </div>
 
-        <form method="POST" action="{{ route('manager.properties.update', $property) }}" class="space-y-6">
+        <form method="POST" action="{{ route('admin.properties.update', $property) }}" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -137,7 +137,7 @@
             </div>
 
             <div class="flex justify-end gap-4">
-                <a href="{{ route('manager.dashboard') }}"
+                <a href="{{ route('admin.properties.index') }}"
                    class="px-6 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 transition">
                     Cancel
                 </a>
