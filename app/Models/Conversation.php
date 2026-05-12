@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +27,7 @@ class Conversation extends Model
      */
     public function propertyManager(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'propery_manager_id');
+        return $this->belongsTo(User::class, 'property_manager_id');
     }
 
     /**
@@ -43,6 +44,16 @@ class Conversation extends Model
     public function latestMessage(): HasMany
     {
         return $this->hasMany(Message::class)->latest()->limit(1);
+    }
+
+    /**
+     * Add casts
+     */
+    protected function casts(): array
+    {
+        return [
+            'last_message_at' => 'datetime',
+        ];
     }
 
 }

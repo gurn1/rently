@@ -28,4 +28,14 @@ class Message extends Model
         return $this->belongsTo(User::class, 'sender_id');
     }
 
+    /**
+     * Add casts
+     */
+    protected function casts(): array
+    {
+        return [
+            'last_message_at' => 'datetime',
+        ];
+    }
+
 }

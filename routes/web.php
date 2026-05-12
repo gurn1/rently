@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\Manager\PropertyController as ManagerPropertyController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
+use App\Http\Controllers\Manager\ConversationController as ManagerConversationController;
+use App\Http\Controllers\Tenant\ConversationController as TenantConversationController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +48,17 @@ Route::middleware(['auth', 'role:tenant'])
         Route::get('/dashboard', function () {
             return view('dashboard.tenant.dashboard');
         })->name('dashboard');
+
+        Route::resource('messages', TenantConversationController::class)
+            ->only(['index', 'show'])
+            ->parameters(['messages' => 'conversation'])
+            ->names([
+                'index' => 'messages.index',
+                'show'  => 'messages.show',
+            ]);
+
+        Route::post('/messages/{conversation}', [MessageController::class, 'store'])
+            ->name('messages.store');
     });
 
 /**
@@ -69,6 +83,17 @@ Route::middleware(['auth', 'role:property_manager'])
                 'update'  => 'properties.update',
                 'destroy' => 'properties.destroy',
             ]);
+
+        Route::resource('messages', ManagerConversationController::class)
+            ->only(['index', 'show'])
+            ->parameters(['messages' => 'conversation'])
+            ->names([
+                'index' => 'messages.index',
+                'show' => 'messages.show'
+            ]);
+
+        Route::post('/messages/{conversation}', [MessageController::class, 'store'])
+            ->name('messages.store');
     });
 
 /**
