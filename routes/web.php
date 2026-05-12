@@ -6,6 +6,9 @@ use App\Http\Controllers\Manager\PropertyController as ManagerPropertyController
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 use App\Http\Controllers\Manager\ConversationController as ManagerConversationController;
 use App\Http\Controllers\Tenant\ConversationController as TenantConversationController;
+use App\Http\Controllers\Manager\LeaseController as ManagerLeaseController;
+use App\Http\Controllers\Tenant\LeaseController as TenantLeaseController;
+use App\Http\Controllers\Admin\LeaseController as AdminLeaseController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +62,13 @@ Route::middleware(['auth', 'role:tenant'])
 
         Route::post('/messages/{conversation}', [MessageController::class, 'store'])
             ->name('messages.store');
+
+        Route::resource('leases', TenantLeaseController::class)
+            ->only(['index', 'show'])
+            ->names([
+                'index' => 'leases.index',
+                'show'  => 'leases.show',
+            ]);
     });
 
 /**
@@ -94,6 +104,14 @@ Route::middleware(['auth', 'role:property_manager'])
 
         Route::post('/messages/{conversation}', [MessageController::class, 'store'])
             ->name('messages.store');
+
+        Route::resource('leases', ManagerLeaseController::class)
+            ->names([
+                'index' => 'leases.index',
+                'create'  => 'leases.create',
+                'store'   => 'leases.store',
+                'show'  => 'leases.show',
+            ]);
     });
 
 /**
@@ -117,5 +135,16 @@ Route::middleware(['auth', 'role:admin'])
                 'edit'    => 'properties.edit',
                 'update'  => 'properties.update',
                 'destroy' => 'properties.destroy',
+            ]);
+
+        Route::resource('leases', AdminLeaseController::class)
+            ->names([
+                'index'   => 'leases.index',
+                'create'  => 'leases.create',
+                'store'   => 'leases.store',
+                'show'    => 'leases.show',
+                'edit'    => 'leases.edit',
+                'update'  => 'leases.update',
+                'destroy' => 'leases.destroy',
             ]);
     });
