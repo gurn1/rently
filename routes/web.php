@@ -12,10 +12,14 @@ use App\Http\Controllers\Admin\WorkOrderController as AdminWorkOrderController;
 use App\Http\Controllers\Manager\LeaseController as ManagerLeaseController;
 use App\Http\Controllers\Tenant\LeaseController as TenantLeaseController;
 use App\Http\Controllers\Admin\LeaseController as AdminLeaseController;
+use App\Http\Controllers\Manager\DocumentController as ManagerDocumentController;
+use App\Http\Controllers\Tenant\DocumentController as TenantDocumentController;
+use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\WorkOrderUpdateController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     return view('welcome');
@@ -85,6 +89,15 @@ Route::middleware(['auth', 'role:tenant'])
 
         Route::post('/work-orders/{workOrder}/updates', [WorkOrderUpdateController::class, 'store'])
             ->name('work-orders.updates.store');
+
+        Route::resource('documents', TenantDocumentController::class)
+            ->only(['index', 'show'])
+            ->names([
+                'index' => 'documents.index',
+                'show'  => 'documents.show',
+            ]);
+        Route::post('/documents/{document}/sign', [TenantDocumentController::class, 'sign'])
+            ->name('documents.sign');
     });
 
 /**
@@ -142,6 +155,16 @@ Route::middleware(['auth', 'role:property_manager'])
 
         Route::post('/work-orders/{workOrder}/updates', [WorkOrderUpdateController::class, 'store'])
             ->name('work-orders.updates.store');
+
+        Route::resource('documents', ManagerDocumentController::class)
+            ->only(['index', 'show', 'create', 'store', 'destroy'])
+            ->names([
+                'index'   => 'documents.index',
+                'show'    => 'documents.show',
+                'create'  => 'documents.create',
+                'store'   => 'documents.store',
+                'destroy' => 'documents.destroy',
+            ]);
     });
 
 /**
@@ -183,5 +206,12 @@ Route::middleware(['auth', 'role:admin'])
             ->names([
                 'index' => 'work-orders.index',
                 'show'  => 'work-orders.show',
+            ]);
+
+        Route::resource('documents', AdminDocumentController::class)
+            ->only(['index', 'show'])
+            ->names([
+                'index' => 'documents.index',
+                'show'  => 'documents.show',
             ]);
     });

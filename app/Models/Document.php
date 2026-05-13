@@ -12,6 +12,10 @@ class Document extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'signed_at' => 'datetime',
+    ];
+
     /**
      * Uploaded by a propert manager
      */
