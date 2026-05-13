@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\Manager\PropertyController as ManagerPropertyController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
@@ -98,6 +99,9 @@ Route::middleware(['auth', 'role:tenant'])
             ]);
         Route::post('/documents/{document}/sign', [TenantDocumentController::class, 'sign'])
             ->name('documents.sign');
+
+        Route::get('/profile', [UserProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
     });
 
 /**
@@ -165,6 +169,9 @@ Route::middleware(['auth', 'role:property_manager'])
                 'store'   => 'documents.store',
                 'destroy' => 'documents.destroy',
             ]);
+
+        Route::get('/profile', [UserProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
     });
 
 /**
@@ -214,4 +221,7 @@ Route::middleware(['auth', 'role:admin'])
                 'index' => 'documents.index',
                 'show'  => 'documents.show',
             ]);
+
+        Route::get('/profile', [UserProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
     });
