@@ -30,6 +30,11 @@
 5. [Key Design Decisions](#key-design-decisions)
 6. [Eloquent Models & Relationships](#eloquent-models--relationships)
 7. [Route & Middleware Structure](#route--middleware-structure)
+8. [Controllers](#controllers)
+9. [Policies](#policies)
+10. [Notifications](#notifications)
+11. [View Structure](#view-structure)
+12. [Feature Progress](#feature-progress)
 
 ---
 
@@ -597,6 +602,193 @@ route('admin.dashboard')    // → /admin/dashboard
 
 | Role | View Path |
 |------|----------|
-| Tenant | `resources/views/tenant/dashboard.blade.php` |
-| Property Manager | `resources/views/manager/dashboard.blade.php` |
-| Admin | `resources/views/admin/dashboard.blade.php` |
+| Tenant | `resources/views/dashboard/tenant/dashboard.blade.php` |
+| Property Manager | `resources/views/dashboard/manager/dashboard.blade.php` |
+| Admin | `resources/views/dashboard/admin/dashboard.blade.php` |
+
+---
+
+## Controllers
+
+Controllers are organised by role namespace to keep concerns separated.
+
+### Public
+| Controller | Path | Purpose |
+|---|---|---|
+| `PropertyController` | `App\Http\Controllers\PropertyController` | Public listings and single property view |
+
+### Manager
+| Controller | Path | Purpose |
+|---|---|---|
+| `Manager\PropertyController` | `App\Http\Controllers\Manager\PropertyController` | Property CRUD for managers |
+| `Manager\LeaseController` | `App\Http\Controllers\Manager\LeaseController` | Lease management for managers |
+| `Manager\DocumentController` | `App\Http\Controllers\Manager\DocumentController` | Document upload and management |
+| `Manager\WorkOrderController` | `App\Http\Controllers\Manager\WorkOrderController` | Work order management |
+| `Manager\ConversationController` | `App\Http\Controllers\Manager\ConversationController` | Messaging inbox and thread |
+
+### Tenant
+| Controller | Path | Purpose |
+|---|---|---|
+| `Tenant\LeaseController` | `App\Http\Controllers\Tenant\LeaseController` | View own leases |
+| `Tenant\DocumentController` | `App\Http\Controllers\Tenant\DocumentController` | View and sign documents |
+| `Tenant\WorkOrderController` | `App\Http\Controllers\Tenant\WorkOrderController` | Raise and view work orders |
+| `Tenant\ConversationController` | `App\Http\Controllers\Tenant\ConversationController` | Messaging inbox and thread |
+
+### Admin
+| Controller | Path | Purpose |
+|---|---|---|
+| `Admin\PropertyController` | `App\Http\Controllers\Admin\PropertyController` | Full property management |
+| `Admin\LeaseController` | `App\Http\Controllers\Admin\LeaseController` | Full lease management |
+| `Admin\DocumentController` | `App\Http\Controllers\Admin\DocumentController` | Document oversight |
+| `Admin\WorkOrderController` | `App\Http\Controllers\Admin\WorkOrderController` | Work order oversight |
+
+### Shared
+| Controller | Path | Purpose |
+|---|---|---|
+| `MessageController` | `App\Http\Controllers\MessageController` | Send messages (shared by tenant and manager) |
+| `WorkOrderUpdateController` | `App\Http\Controllers\WorkOrderUpdateController` | Add work order updates (shared) |
+| `UserProfileController` | `App\Http\Controllers\UserProfileController` | Edit profile (shared by all roles) |
+| `NotificationController` | `App\Http\Controllers\NotificationController` | Mark notifications as read |
+
+---
+
+## Policies
+
+Policies control model-level access. Each policy is auto-discovered by Laravel.
+
+| Policy | Model | File |
+|---|---|---|
+| `PropertyPolicy` | Property | `app/Policies/PropertyPolicy.php` |
+| `LeasePolicy` | Lease | `app/Policies/LeasePolicy.php` |
+| `DocumentPolicy` | Document | `app/Policies/DocumentPolicy.php` |
+| `WorkOrderPolicy` | WorkOrder | `app/Policies/WorkOrderPolicy.php` |
+| `MessagePolicy` | Message | `app/Policies/MessagePolicy.php` |
+
+### Policy rules summary
+
+**PropertyPolicy**
+- `viewAny` / `view` — public, including guests (`?User`)
+- `create` / `update` — admin or property manager (managers limited to own properties)
+- `delete` — admin only
+
+**LeasePolicy**
+- `view` — admin sees all, manager sees own properties, tenant sees own leases
+- `create` / `update` — admin or property manager
+- `delete` — admin only
+
+**DocumentPolicy**
+- `view` — admin, uploader (manager), or assigned tenant
+- `create` / `update` / `delete` — admin or uploading manager
+
+**WorkOrderPolicy**
+- `view` — admin sees all, manager sees own properties, tenant sees own raised orders
+- `create` — manager or tenant
+- `update` — admin or manager (own properties)
+- `delete` — admin only
+
+**MessagePolicy**
+- `view` — admin, or either party in the conversation
+- `create` — manager or tenant
+- `update` — always false (messages cannot be edited)
+- `delete` — admin only
+
+---
+
+## Notifications
+
+Notifications use Laravel's built-in database channel. All notification classes live in `app/Notifications/`.
+
+| Notification | Trigger | Recipient |
+|---|---|---|
+| `NewMessageNotification` | Message sent | Other party in conversation |
+| `WorkOrderCreatedNotification` | Work order raised | Property manager |
+| `WorkOrderUpdatedNotification` | Work order status changed | Tenant who raised it |
+| `WorkOrderCommentNotification` | Update/comment added | Other party on work order |
+| `DocumentUploadedNotification` | Document uploaded | Tenant |
+| `DocumentSignedNotification` | Document signed | Uploading manager |
+| `LeaseStatusChangedNotification` | Lease status updated | Tenant |
+
+### Notification data payload
+
+Each notification stores a `type` key in its data payload used by `NotificationController` to redirect to the correct resource on click:
+
+| Type | Redirect |
+|---|---|
+| `new_message` | conversation show page |
+| `work_order_created` / `work_order_updated` / `work_order_comment` | work order show page |
+| `document_uploaded` / `document_signed` | document show page |
+| `lease_status_changed` | lease show page |
+
+### Route prefix helper
+
+The `User` model has a `routePrefix()` helper method to map role names to route prefixes:
+
+```php
+$user->routePrefix(); // 'manager', 'tenant', or 'admin'
+```
+
+This avoids issues with `property_manager` role name not matching the `manager` route prefix.
+
+---
+
+## View Structure
+
+```
+resources/views/
+├── dashboard/
+│   ├── admin/
+│   │   ├── dashboard.blade.php
+│   │   ├── properties/
+│   │   ├── leases/
+│   │   ├── documents/
+│   │   └── work-orders/
+│   ├── manager/
+│   │   ├── dashboard.blade.php
+│   │   ├── properties/
+│   │   ├── leases/
+│   │   ├── documents/
+│   │   ├── work-orders/
+│   │   └── messages/
+│   ├── tenant/
+│   │   ├── dashboard.blade.php
+│   │   ├── leases/
+│   │   ├── documents/
+│   │   ├── work-orders/
+│   │   └── messages/
+│   └── profile/
+│       └── edit.blade.php
+├── properties/
+│   ├── index.blade.php        ← public listings
+│   └── show.blade.php         ← public single view
+├── layouts/
+│   ├── public.blade.php       ← public facing pages
+│   ├── portal.blade.php       ← all dashboard views
+│   └── guest.blade.php        ← login/register (Breeze)
+└── partials/
+    └── alert.blade.php        ← flash message partial
+```
+
+---
+
+## Feature Progress
+
+| Feature | Status | Branch |
+|---|---|---|
+| Database schema & migrations | ✅ Complete | `database` |
+| Seed data | ✅ Complete | `database` |
+| Eloquent models & relationships | ✅ Complete | `feature/eloquent-models` |
+| Spatie roles | ✅ Complete | `feature/eloquent-models` |
+| Route protection & middleware | ✅ Complete | `feature/auth-middleware` |
+| Policies | ✅ Complete | `feature/auth-middleware` |
+| Property CRUD (public, manager, admin) | ✅ Complete | `feature/property-crud` |
+| Dashboard structure (admin, manager, tenant) | ✅ Complete | `feature/property-crud` |
+| Messaging system | ✅ Complete | `feature/messaging` |
+| Lease management | ✅ Complete | `feature/lease-management` |
+| Work orders | ✅ Complete | `feature/work-orders` |
+| Documents with signing | ✅ Complete | `feature/documents` |
+| Tenant dashboard | ✅ Complete | `feature/tenant-dashboard` |
+| User profile management | ✅ Complete | `feature/user-profiles` |
+| Navigation | ✅ Complete | `feature/navigation` |
+| Notifications | ✅ Complete | `feature/notifications` |
+| Admin user management | ⬜ Pending | — |
+| Payments | ⬜ Deferred | — |
