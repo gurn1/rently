@@ -1,4 +1,17 @@
 @php use Illuminate\Support\Facades\Storage; @endphp
+
+{{-- Notification bell --}}
+@php
+    $notifications = auth()->user()->unreadNotifications->take(5);
+    $unreadCount = auth()->user()->unreadNotifications->count();
+
+    $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
+        'property_manager' => 'manager',
+        'admin' => 'admin',
+        'tenant' => 'tenant',
+        default => 'tenant'
+    };
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -6,6 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Portal') — Rently</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-gray-100 text-gray-900 antialiased">
     <nav class="bg-white shadow-sm sticky top-0 z-50">
@@ -96,7 +110,7 @@
 
                 {{-- Profile image or initials --}}
                 @php $profile = auth()->user()->profile; @endphp
-                <a href="{{ route(auth()->user()->getRoleNames()->first() . '.profile.edit') }}"
+                <a href="{{ route($rolePrefix . '.profile.edit') }}"
                    class="flex items-center gap-2 hover:opacity-80 transition">
                     <div class="w-8 h-8 rounded-full overflow-hidden bg-indigo-100 flex items-center justify-center flex-shrink-0">
                         @if($profile?->profile_image)
@@ -117,6 +131,50 @@
                 <span class="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded-full capitalize">
                     {{ str_replace('_', ' ', auth()->user()->getRoleNames()->first()) }}
                 </span>
+
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open"
+                            class="relative text-gray-500 hover:text-indigo-600 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        @if($unreadCount > 0)
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                                {{ $unreadCount > 9 ? '9+' : $unreadCount }}
+                            </span>
+                        @endif
+                    </button>
+
+                    <div x-show="open"
+                        @click.away="open = false"
+                        x-transition
+                        class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border z-50">
+                        <div class="px-4 py-3 border-b flex justify-between items-center">
+                            <p class="font-semibold text-sm text-gray-700">Notifications</p>
+                            @if($unreadCount > 0)
+                                <form method="POST" action="{{ route('notifications.markAllRead') }}">
+                                    @csrf
+                                    <button type="submit" class="text-xs text-indigo-600 hover:underline">
+                                        Mark all read
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+
+                        @forelse($notifications as $notification)
+                            <a href="{{ route('notifications.read', $notification->id) }}"
+                            class="block px-4 py-3 border-b last:border-0 hover:bg-gray-50 transition">
+                                <p class="text-sm text-gray-800">{{ $notification->data['message'] }}</p>
+                                <p class="text-xs text-gray-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                            </a>
+                        @empty
+                            <div class="px-4 py-6 text-center text-gray-400 text-sm">
+                                No new notifications
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\WorkOrderCreatedNotification;
 use App\Models\Lease;
 use App\Models\WorkOrder;
 use Illuminate\Http\Request;
@@ -52,6 +53,11 @@ class WorkOrderController extends Controller
         $validated['status'] = 'open';
 
         WorkOrder::create($validated);
+
+        $workOrder->load(['raisedBy', 'property.propertyManager']);
+        if ($workOrder->property->propertyManager) {
+            $workOrder->property->propertyManager->notify(new WorkOrderCreatedNotification($workOrder));
+        }
 
         return redirect()->route('tenant.work-orders.index')
             ->with('success', 'Work order submitted successfully.');

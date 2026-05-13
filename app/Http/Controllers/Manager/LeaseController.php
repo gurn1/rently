@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\LeaseStatusChangedNotification;
 use App\Models\Lease;
 use App\Models\Property;
 use App\Models\User;
@@ -94,6 +95,8 @@ class LeaseController extends Controller
     {
         $this->authorize('update', $lease);
 
+        $oldStatus = $lease->status; // capture before update
+
         $validated = $request->validate([
             'rent_amount'        => 'required|numeric|min:0',
             'start_date'         => 'required|date',
@@ -114,6 +117,10 @@ class LeaseController extends Controller
         }
 
         $lease->update($validated);
+
+        if ($lease->wasChanged('status')) {
+            $lease->tenant->notify(new LeaseStatusChangedNotification($lease, $oldStatus));
+        }
 
         return redirect()->route('manager.leases.show', $lease)
             ->with('success', 'Lease updated successfully.');

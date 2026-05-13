@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Models\Lease;
 use App\Models\Property;
 use App\Models\User;
+use App\Notifications\DocumentUploadedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -78,6 +79,9 @@ class DocumentController extends Controller
             'requires_signature' => $request->boolean('requires_signature'),
             'path'               => $path,
         ]);
+
+        $tenant = \App\Models\User::find($validated['tenant_id']);
+        $tenant->notify(new DocumentUploadedNotification($document));
 
         return redirect()->route('manager.documents.index')
             ->with('success', 'Document uploaded successfully.');

@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\WorkOrder;
 use App\Models\WorkOrderUpdate;
+use App\Notifications\WorkOrderCommentNotification;
 use Illuminate\Http\Request;
 
 class WorkOrderUpdateController extends Controller
@@ -24,11 +25,20 @@ class WorkOrderUpdateController extends Controller
             abort(403);
         }
 
-        WorkOrderUpdate::create([
+        $update = WorkOrderUpdate::create([
             'work_order_id' => $workOrder->id,
             'user_id'       => $user->id,
             'comment'       => $validated['comment'],
         ]);
+
+        // Notify the other party
+        $recipient = auth()->id() === $workOrder->raised_by
+            ? $workOrder->property->propertyManager
+            : $workOrder->raisedBy;
+
+        if ($recipient && $recipient->id !== auth()->id()) {
+            $recipient->notify(new WorkOrderCommentNotification($update, $workOrder));
+        }
 
         // Redirect back to the correct dashboard
         if ($user->hasRole('property_manager')) {

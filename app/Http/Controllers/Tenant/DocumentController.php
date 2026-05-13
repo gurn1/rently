@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
 use App\Models\Document;
+use App\Notifications\DocumentSignedNotification;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
@@ -38,6 +39,9 @@ class DocumentController extends Controller
             'is_signed' => true,
             'signed_at' => now(),
         ]);
+
+        $uploader = \App\Models\User::find($document->uploaded_by);
+        $uploader->notify(new DocumentSignedNotification($document));
 
         return redirect()->route('tenant.documents.show', $document)
             ->with('success', 'Document signed successfully.');

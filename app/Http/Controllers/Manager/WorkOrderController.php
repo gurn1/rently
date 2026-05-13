@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\WorkOrderCreatedNotification;
+use App\Notifications\WorkOrderUpdatedNotification;
 use App\Models\Property;
 use App\Models\WorkOrder;
 use Illuminate\Http\Request;
@@ -50,6 +52,13 @@ class WorkOrderController extends Controller
 
         WorkOrder::create($validated);
 
+        // Notify the property manager (themselves in this case if manager raised it)
+        // But if tenant raised it notify the manager
+        $workOrder->load('raisedBy', 'property');
+        if (!auth()->user()->hasRole('property_manager')) {
+            $workOrder->property->propertyManager->notify(new WorkOrderCreatedNotification($workOrder));
+        }
+
         return redirect()->route('manager.work-orders.index')
             ->with('success', 'Work order created successfully.');
     }
@@ -83,6 +92,7 @@ class WorkOrderController extends Controller
     public function update(Request $request, WorkOrder $workOrder)
     {
         $this->authorize('update', $workOrder);
+        $oldStatus = $workOrder->status; // capture before update
 
         $validated = $request->validate([
             'title'       => 'required|string|max:255',
@@ -97,6 +107,11 @@ class WorkOrderController extends Controller
         }
 
         $workOrder->update($validated);
+
+        // Notify the tenant who raised it if status changed
+        if ($workOrder->wasChanged('status')) {
+            $workOrder->raisedBy->notify(new WorkOrderUpdatedNotification($workOrder, $oldStatus));
+        }
 
         return redirect()->route('manager.work-orders.show', $workOrder)
             ->with('success', 'Work order updated successfully.');

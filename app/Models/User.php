@@ -73,4 +73,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function routePrefix(): string
+    {
+        return match($this->getRoleNames()->first()) {
+            'property_manager' => 'manager',
+            'admin'            => 'admin',
+            'tenant'           => 'tenant',
+            default            => 'tenant',
+        };
+    }
 }
