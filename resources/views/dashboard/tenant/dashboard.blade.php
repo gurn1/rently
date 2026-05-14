@@ -25,6 +25,25 @@
             ->count();
     @endphp
 
+    @php
+        $failedPayments = App\Models\Payment::where('tenant_id', auth()->id())
+            ->where('status', 'failed')
+            ->count();
+    @endphp
+
+    @if($failedPayments > 0)
+        <div class="bg-red-50 border border-red-300 text-red-800 px-4 py-4 rounded-lg mb-8 flex justify-between items-center">
+            <div>
+                <p class="font-semibold">You have {{ $failedPayments }} failed payment(s).</p>
+                <p class="text-sm mt-1">Please update your payment details as soon as possible.</p>
+            </div>
+            <a href="{{ route('tenant.payments.index') }}"
+            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition text-sm flex-shrink-0">
+                View Payments
+            </a>
+        </div>
+    @endif
+
     {{-- Stats --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div class="bg-white rounded-lg shadow p-6">

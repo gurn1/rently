@@ -39,6 +39,10 @@
                            class="text-gray-600 hover:text-indigo-600 transition {{ request()->routeIs('tenant.leases.*') ? 'text-indigo-600 font-medium' : '' }}">
                             My Lease
                         </a>
+                        <a href="{{ route('tenant.payments.index') }}"
+                        class="text-gray-600 hover:text-indigo-600 transition {{ request()->routeIs('tenant.payments.*') ? 'text-indigo-600 font-medium' : '' }}">
+                            Payments
+                        </a>
                         <a href="{{ route('tenant.documents.index') }}"
                            class="text-gray-600 hover:text-indigo-600 transition {{ request()->routeIs('tenant.documents.*') ? 'text-indigo-600 font-medium' : '' }}">
                             Documents
@@ -66,6 +70,10 @@
                            class="text-gray-600 hover:text-indigo-600 transition {{ request()->routeIs('manager.leases.*') ? 'text-indigo-600 font-medium' : '' }}">
                             Leases
                         </a>
+                        <a href="{{ route('manager.payments.index') }}"
+                            class="text-gray-600 hover:text-indigo-600 transition {{ request()->routeIs('manager.payments.*') ? 'text-indigo-600 font-medium' : '' }}">
+                            Payments
+                        </a>
                         <a href="{{ route('manager.documents.index') }}"
                            class="text-gray-600 hover:text-indigo-600 transition {{ request()->routeIs('manager.documents.*') ? 'text-indigo-600 font-medium' : '' }}">
                             Documents
@@ -92,6 +100,10 @@
                         <a href="{{ route('admin.leases.index') }}"
                            class="text-gray-600 hover:text-indigo-600 transition {{ request()->routeIs('admin.leases.*') ? 'text-indigo-600 font-medium' : '' }}">
                             Leases
+                        </a>
+                        <a href="{{ route('admin.payments.index') }}"
+                            class="text-gray-600 hover:text-indigo-600 transition {{ request()->routeIs('admin.payments.*') ? 'text-indigo-600 font-medium' : '' }}">
+                            Payments
                         </a>
                         <a href="{{ route('admin.documents.index') }}"
                            class="text-gray-600 hover:text-indigo-600 transition {{ request()->routeIs('admin.documents.*') ? 'text-indigo-600 font-medium' : '' }}">

@@ -17,6 +17,10 @@ use App\Http\Controllers\Manager\DocumentController as ManagerDocumentController
 use App\Http\Controllers\Tenant\DocumentController as TenantDocumentController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Tenant\PaymentController as TenantPaymentController;
+use App\Http\Controllers\Manager\PaymentController as ManagerPaymentController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\WorkOrderUpdateController;
 use App\Http\Controllers\NotificationController;
@@ -106,6 +110,11 @@ Route::middleware(['auth', 'role:tenant'])
 
         Route::get('/profile', [UserProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+
+        Route::get('/payments', [TenantPaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/{payment}', [TenantPaymentController::class, 'show'])->name('payments.show');
+        Route::get('/payments/{lease}/checkout', [TenantPaymentController::class, 'checkout'])->name('payments.checkout');
+        Route::get('/payments/{payment}/success', [TenantPaymentController::class, 'success'])->name('payments.success');
     });
 
 /**
@@ -176,6 +185,12 @@ Route::middleware(['auth', 'role:property_manager'])
 
         Route::get('/profile', [UserProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+
+        Route::get('/payments', [ManagerPaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/create', [ManagerPaymentController::class, 'create'])->name('payments.create');
+        Route::post('/payments', [ManagerPaymentController::class, 'store'])->name('payments.store');
+        Route::get('/payments/{payment}', [ManagerPaymentController::class, 'show'])->name('payments.show');
+        Route::post('/payments/{payment}/mark-paid', [ManagerPaymentController::class, 'markPaid'])->name('payments.mark-paid');
     });
 
 /**
@@ -245,4 +260,9 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::delete('/users/{user}/remove-tenant/{tenant}', [AdminUserController::class, 'removeTenant'])
             ->name('users.remove-tenant');
+
+        Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/{payment}', [AdminPaymentController::class, 'show'])->name('payments.show');
     });
+
+    Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook']);
