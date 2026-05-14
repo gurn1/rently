@@ -1,4 +1,13 @@
-@php use Illuminate\Support\Facades\Storage; @endphp
+@php 
+use Illuminate\Support\Facades\Storage; 
+
+$rolePrefix = match(auth()->user()->getRoleNames()->first()) {
+    'property_manager' => 'manager',
+    'admin' => 'admin',
+    'tenant' => 'tenant',
+    default => 'tenant'
+};
+@endphp
 
 @extends('layouts.portal')
 
@@ -12,7 +21,7 @@
         </div>
 
         <form method="POST"
-              action="{{ route(auth()->user()->getRoleNames()->first() . '.profile.update') }}"
+              action="{{ route($rolePrefix . '.profile.update') }}"
               enctype="multipart/form-data"
               class="space-y-6">
             @csrf

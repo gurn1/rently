@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\LeaseController as AdminLeaseController;
 use App\Http\Controllers\Manager\DocumentController as ManagerDocumentController;
 use App\Http\Controllers\Tenant\DocumentController as TenantDocumentController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\WorkOrderUpdateController;
 use App\Http\Controllers\NotificationController;
@@ -227,4 +228,21 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::get('/profile', [UserProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+
+        Route::resource('users', AdminUserController::class)
+            ->names([
+                'index'   => 'users.index',
+                'create'  => 'users.create',
+                'store'   => 'users.store',
+                'show'    => 'users.show',
+                'edit'    => 'users.edit',
+                'update'  => 'users.update',
+                'destroy' => 'users.destroy',
+            ]);
+
+        Route::post('/users/{user}/assign-tenant', [AdminUserController::class, 'assignTenant'])
+            ->name('users.assign-tenant');
+
+        Route::delete('/users/{user}/remove-tenant/{tenant}', [AdminUserController::class, 'removeTenant'])
+            ->name('users.remove-tenant');
     });
