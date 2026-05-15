@@ -73,15 +73,45 @@ class PaymentController extends Controller
             ],
         ]);
 
+        // After creating the checkout session store the session ID temporarily
+        $payment->update([
+            'stripe_payment_intent_id' => $checkoutSession->id
+        ]);
+
         return redirect($checkoutSession->url);
     }
 
-    public function success(Payment $payment)
+    public function success(Request $request, Payment $payment)
     {
         if ($payment->tenant_id !== auth()->id()) {
             abort(403);
         }
 
+        // If still pending, verify with Stripe directly
+        if ($payment->status === 'pending' && $payment->stripe_payment_intent_id) {
+            $stripe = new \Stripe\StripeClient(config('cashier.secret'));
+            $intent = $stripe->paymentIntents->retrieve($payment->stripe_payment_intent_id);
+
+            if ($intent->status === 'succeeded') {
+                $payment->update([
+                    'status'  => 'paid',
+                    'paid_at' => now(),
+                ]);
+
+                // Notify all parties
+                $tenant = $payment->tenant;
+                $manager = $payment->lease->property->propertyManager;
+                $admins = \App\Models\User::role('admin')->get();
+
+                $tenant->notify(new \App\Notifications\PaymentSuccessfulNotification($payment));
+                if ($manager) $manager->notify(new \App\Notifications\PaymentSuccessfulNotification($payment));
+                foreach ($admins as $admin) {
+                    $admin->notify(new \App\Notifications\PaymentSuccessfulNotification($payment));
+                }
+            }
+        }
+
+        $payment->refresh();
         return view('dashboard.tenant.payments.success', compact('payment'));
     }
 }

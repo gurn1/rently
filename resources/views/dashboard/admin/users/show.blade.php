@@ -69,7 +69,7 @@
             </div>
 
             {{-- Properties (if manager) --}}
-            @role('property_manager', $user)
+            @if($user->hasRole('property_manager'))
                 <div class="bg-white rounded-lg shadow p-6">
                     <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Properties</h2>
                     @forelse($user->properties as $property)
@@ -84,7 +84,7 @@
                         <p class="text-gray-400 text-sm">No properties assigned.</p>
                     @endforelse
                 </div>
-            @endrole
+            @endif
 
             {{-- Leases (if tenant) --}}
             @if($user->hasRole('tenant'))

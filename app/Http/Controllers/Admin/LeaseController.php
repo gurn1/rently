@@ -59,9 +59,12 @@ class LeaseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Lease $lease)
     {
-        //
+        $this->authorize('view', $lease);
+        $lease->load(['property', 'tenant', 'documents', 'workOrders']);
+
+        return view('dashboard.admin.leases.show', compact('lease'));
     }
 
     /**

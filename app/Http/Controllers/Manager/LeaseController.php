@@ -7,6 +7,7 @@ use App\Notifications\LeaseStatusChangedNotification;
 use App\Models\Lease;
 use App\Models\Property;
 use App\Models\User;
+use App\Services\LeasePaymentService;
 use Illuminate\Http\Request;
 
 class LeaseController extends Controller
@@ -59,6 +60,12 @@ class LeaseController extends Controller
         // Update property status to occupied
         Property::where('id', $validated['property_id'])
             ->update(['availability_status' => 'occupied']);
+
+        // Auto-generate payments if lease is active
+        if ($lease->status === 'active') {
+            $paymentMethod = $request->input('payment_method', 'stripe');
+            app(LeasePaymentService::class)->generatePayments($lease, $paymentMethod);
+        }
 
         return redirect()->route('manager.leases.show', $lease)
             ->with('success', 'Lease created successfully.');
@@ -120,6 +127,17 @@ class LeaseController extends Controller
 
         if ($lease->wasChanged('status')) {
             $lease->tenant->notify(new LeaseStatusChangedNotification($lease, $oldStatus));
+        }
+
+        // Cancel future payments if lease ended or terminated
+        if (in_array($validated['status'], ['ended', 'terminated'])) {
+            app(LeasePaymentService::class)->cancelFuturePayments($lease);
+        }
+
+        // Generate payments if lease just became active
+        if ($oldStatus !== 'active' && $validated['status'] === 'active') {
+            $paymentMethod = $lease->payments()->latest()->first()?->payment_method ?? 'stripe';
+            app(LeasePaymentService::class)->generatePayments($lease, $paymentMethod);
         }
 
         return redirect()->route('manager.leases.show', $lease)

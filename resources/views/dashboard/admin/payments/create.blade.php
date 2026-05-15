@@ -6,13 +6,13 @@
     <div class="max-w-2xl mx-auto">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-2xl font-bold text-gray-900">Request Payment</h1>
-            <a href="{{ route('manager.payments.index') }}"
+            <a href="{{ route('admin.payments.index') }}"
                class="text-sm text-indigo-600 hover:underline">
                 &larr; Back to payments
             </a>
         </div>
 
-        <form method="POST" action="{{ route('manager.payments.store') }}" class="space-y-6">
+        <form method="POST" action="{{ route('admin.payments.store') }}" class="space-y-6">
             @csrf
 
             <div class="bg-white rounded-lg shadow p-6 space-y-6">
@@ -74,7 +74,7 @@
             </div>
 
             <div class="flex justify-end gap-4">
-                <a href="{{ route('manager.payments.index') }}"
+                <a href="{{ route('admin.payments.index') }}"
                    class="px-6 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 transition">
                     Cancel
                 </a>

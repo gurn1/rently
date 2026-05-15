@@ -83,4 +83,31 @@ class PaymentController extends Controller
 
         return view('dashboard.manager.payments.create', compact('leases'));
     }
+
+    public function updateStatus(Request $request, Payment $payment)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,paid,failed,refunded',
+            'notes'  => 'nullable|string',
+        ]);
+
+        $oldStatus = $payment->status;
+
+        $payment->update([
+            'status'  => $validated['status'],
+            'paid_at' => $validated['status'] === 'paid' ? now() : $payment->paid_at,
+            'notes'   => $validated['notes'] ?? $payment->notes,
+        ]);
+
+        // Notify tenant if status changed
+        if ($oldStatus !== $validated['status']) {
+            if ($validated['status'] === 'paid') {
+                $payment->tenant->notify(new \App\Notifications\PaymentSuccessfulNotification($payment));
+            } elseif ($validated['status'] === 'failed') {
+                $payment->tenant->notify(new \App\Notifications\PaymentFailedNotification($payment));
+            }
+        }
+
+        return redirect()->back()->with('success', 'Payment status updated.');
+    }
 }

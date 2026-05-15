@@ -3,9 +3,16 @@
 @section('title', 'Payments')
 
 @section('content')
-    <div class="mb-8">
-        <h1 class="text-2xl font-bold text-gray-900">All Payments</h1>
-        <p class="text-gray-500 mt-1">{{ $payments->total() }} payment records</p>
+
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Payments</h1>
+            <p class="text-gray-500 mt-1">{{ $payments->total() }} payment records</p>
+        </div>
+        <a href="{{ route('admin.payments.create') }}"
+           class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition text-sm">
+            + Request Payment
+        </a>
     </div>
 
     {{-- Stats --}}
@@ -72,6 +79,16 @@
                             <td class="px-6 py-4">
                                 <a href="{{ route('admin.payments.show', $payment) }}"
                                    class="text-indigo-600 hover:underline">View</a>
+                                @if($payment->status === 'pending' && $payment->payment_method === 'manual')
+                                    <form method="POST"
+                                            action="{{ route('manager.payments.mark-paid', $payment) }}">
+                                        @csrf
+                                        <button type="submit"
+                                                class="text-green-600 hover:underline">
+                                            Mark Paid
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

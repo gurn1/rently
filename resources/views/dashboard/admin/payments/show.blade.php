@@ -44,6 +44,33 @@
                         {{ $payment->status }}
                     </span>
                 </div>
+
+                {{-- Status update --}}
+                @if($payment->status !== 'paid')
+                    <div class="pt-4 border-t mt-4">
+                        <h3 class="font-medium text-gray-700 mb-3 text-sm">Update Status</h3>
+                        <form method="POST"
+                            action="{{ route(auth()->user()->routePrefix() . '.payments.update-status', $payment) }}"
+                            class="space-y-3">
+                            @csrf
+                            <select name="status"
+                                    class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                                @foreach(['pending', 'paid', 'failed', 'refunded'] as $status)
+                                    <option value="{{ $status }}" {{ $payment->status === $status ? 'selected' : '' }}>
+                                        {{ ucfirst($status) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <textarea name="notes" rows="2" placeholder="Add a note (optional)"
+                                    class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">{{ $payment->notes }}</textarea>
+                            <button type="submit"
+                                    class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition text-sm">
+                                Update Status
+                            </button>
+                        </form>
+                    </div>
+                @endif
+
                 @if($payment->paid_at)
                     <div>
                         <p class="text-gray-400">Paid At</p>

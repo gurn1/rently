@@ -191,6 +191,9 @@ Route::middleware(['auth', 'role:property_manager'])
         Route::post('/payments', [ManagerPaymentController::class, 'store'])->name('payments.store');
         Route::get('/payments/{payment}', [ManagerPaymentController::class, 'show'])->name('payments.show');
         Route::post('/payments/{payment}/mark-paid', [ManagerPaymentController::class, 'markPaid'])->name('payments.mark-paid');
+        Route::post('/payments/{payment}/status', [ManagerPaymentController::class, 'updateStatus'])
+            ->name('payments.update-status');
+
     });
 
 /**
@@ -262,7 +265,12 @@ Route::middleware(['auth', 'role:admin'])
             ->name('users.remove-tenant');
 
         Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/create', [AdminPaymentController::class, 'create'])->name('payments.create');
+        Route::post('/payments', [AdminPaymentController::class, 'store'])->name('payments.store');
         Route::get('/payments/{payment}', [AdminPaymentController::class, 'show'])->name('payments.show');
+        Route::post('/payments/{payment}/mark-paid', [AdminPaymentController::class, 'markPaid'])->name('payments.mark-paid');
+        Route::post('/payments/{payment}/status', [AdminPaymentController::class, 'updateStatus'])
+            ->name('payments.update-status');
     });
 
     Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook']);
