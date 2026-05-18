@@ -33,49 +33,44 @@ class PaymentController extends Controller
         return view('dashboard.tenant.payments.show', compact('payment'));
     }
 
-    public function checkout(Lease $lease)
+    public function checkout(Payment $payment)
     {
-        // Ensure tenant owns this lease
-        if ($lease->tenant_id !== auth()->id()) {
+        // Ensure tenant owns this payment
+        if ($payment->tenant_id !== auth()->id()) {
             abort(403);
         }
 
-        $pendingPayment = Payment::where('lease_id', $lease->id)
-            ->where('tenant_id', auth()->id())
-            ->where('status', 'pending')
-            ->latest()
-            ->first();
-
-        if (!$pendingPayment) {
+        if ($payment->status !== 'pending') {
             return redirect()->route('tenant.payments.index')
-                ->with('error', 'No pending payment found.');
+                ->with('error', 'This payment has already been processed.');
         }
 
-        // Create Stripe checkout session
+        $lease = $payment->lease;
+
         $checkoutSession = auth()->user()->checkout([
             [
                 'price_data' => [
                     'currency'     => 'gbp',
                     'product_data' => [
-                        'name' => 'Rent — ' . $lease->property->title,
+                        'name' => 'Rent — ' . $lease->property->title . ' (' . $payment->due_date->format('F Y') . ')',
                     ],
-                    'unit_amount' => $pendingPayment->amount * 100, // Stripe uses pence
+                    'unit_amount' => (int)($payment->amount * 100),
                 ],
                 'quantity' => 1,
             ],
         ], [
-            'success_url' => route('tenant.payments.success', $pendingPayment),
+            'success_url' => route('tenant.payments.success', $payment),
             'cancel_url'  => route('tenant.payments.index'),
             'metadata'    => [
-                'payment_id' => $pendingPayment->id,
+                'payment_id' => $payment->id,
                 'lease_id'   => $lease->id,
                 'tenant_id'  => auth()->id(),
             ],
         ]);
 
-        // After creating the checkout session store the session ID temporarily
+        // Store checkout session ID against this specific payment
         $payment->update([
-            'stripe_payment_intent_id' => $checkoutSession->id
+            'stripe_payment_intent_id' => $checkoutSession->id,
         ]);
 
         return redirect($checkoutSession->url);
@@ -90,24 +85,36 @@ class PaymentController extends Controller
         // If still pending, verify with Stripe directly
         if ($payment->status === 'pending' && $payment->stripe_payment_intent_id) {
             $stripe = new \Stripe\StripeClient(config('cashier.secret'));
-            $intent = $stripe->paymentIntents->retrieve($payment->stripe_payment_intent_id);
 
-            if ($intent->status === 'succeeded') {
-                $payment->update([
-                    'status'  => 'paid',
-                    'paid_at' => now(),
-                ]);
+            try {
+                // Retrieve the checkout session
+                $session = $stripe->checkout->sessions->retrieve(
+                    $payment->stripe_payment_intent_id
+                );
 
-                // Notify all parties
-                $tenant = $payment->tenant;
-                $manager = $payment->lease->property->propertyManager;
-                $admins = \App\Models\User::role('admin')->get();
+                if ($session->payment_status === 'paid') {
+                    $payment->update([
+                        'status'                   => 'paid',
+                        'paid_at'                  => now(),
+                        'stripe_payment_intent_id' => $session->payment_intent, // store actual payment intent ID
+                    ]);
 
-                $tenant->notify(new \App\Notifications\PaymentSuccessfulNotification($payment));
-                if ($manager) $manager->notify(new \App\Notifications\PaymentSuccessfulNotification($payment));
-                foreach ($admins as $admin) {
-                    $admin->notify(new \App\Notifications\PaymentSuccessfulNotification($payment));
+                    $tenant  = $payment->tenant;
+                    $manager = $payment->lease->property->propertyManager;
+                    $admins  = \App\Models\User::role('admin')->get();
+
+                    $tenant->notify(new \App\Notifications\PaymentSuccessfulNotification($payment));
+
+                    if ($manager) {
+                        $manager->notify(new \App\Notifications\PaymentSuccessfulNotification($payment));
+                    }
+
+                    foreach ($admins as $admin) {
+                        $admin->notify(new \App\Notifications\PaymentSuccessfulNotification($payment));
+                    }
                 }
+            } catch (\Exception $e) {
+                \Log::error('Stripe verification failed: ' . $e->getMessage());
             }
         }
 

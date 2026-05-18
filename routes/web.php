@@ -113,7 +113,7 @@ Route::middleware(['auth', 'role:tenant'])
 
         Route::get('/payments', [TenantPaymentController::class, 'index'])->name('payments.index');
         Route::get('/payments/{payment}', [TenantPaymentController::class, 'show'])->name('payments.show');
-        Route::get('/payments/{lease}/checkout', [TenantPaymentController::class, 'checkout'])->name('payments.checkout');
+        Route::get('/payments/{payment}/checkout', [TenantPaymentController::class, 'checkout'])->name('payments.checkout');
         Route::get('/payments/{payment}/success', [TenantPaymentController::class, 'success'])->name('payments.success');
     });
 

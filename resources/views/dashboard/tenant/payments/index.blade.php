@@ -60,7 +60,7 @@
                                     <a href="{{ route('tenant.payments.show', $payment) }}"
                                        class="text-indigo-600 hover:underline">View</a>
                                     @if($payment->status === 'pending' && $payment->payment_method === 'stripe')
-                                        <a href="{{ route('tenant.payments.checkout', $payment->lease) }}"
+                                        <a href="{{ route('tenant.payments.checkout', $payment) }}"
                                            class="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 transition text-xs">
                                             Pay Now
                                         </a>

@@ -62,7 +62,7 @@
 
             @if($payment->status === 'pending' && $payment->payment_method === 'stripe')
                 <div class="pt-4 border-t">
-                    <a href="{{ route('tenant.payments.checkout', $payment->lease) }}"
+                    <a href="{{ route('tenant.payments.checkout', $payment) }}"
                        class="block w-full text-center bg-indigo-600 text-white py-3 rounded hover:bg-indigo-700 transition font-medium">
                         Pay £{{ number_format($payment->amount, 2) }} Now
                     </a>
