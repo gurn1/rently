@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
 @extends('layouts.portal')
 
 @section('title', 'Add Property')
@@ -12,7 +13,7 @@
             </a>
         </div>
 
-        <form method="POST" action="{{ route('manager.properties.store') }}" class="space-y-6">
+        <form method="POST" action="{{ route('manager.properties.store') }}" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <div class="bg-white rounded-lg shadow p-6 space-y-6">
@@ -128,6 +129,9 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Images --}}
+            @include('dashboard.partials.property-images')
 
             {{-- Amenities --}}
             <div class="bg-white rounded-lg shadow p-6">

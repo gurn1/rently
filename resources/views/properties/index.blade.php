@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
 @extends('layouts.public')
 
 @section('title', 'Properties to Rent')
@@ -31,7 +32,7 @@
                         {{-- Image --}}
                         <div class="h-48 bg-gray-200 overflow-hidden">
                             @if($property->images->where('is_featured', true)->first())
-                                <img src="{{ $property->images->where('is_featured', true)->first()->path }}"
+                                <img src="{{ Storage::url($property->images->where('is_featured', true)->first()->path) }}"
                                      alt="{{ $property->title }}"
                                      class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                             @else

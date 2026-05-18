@@ -24,6 +24,7 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\WorkOrderUpdateController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PropertyImageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -191,8 +192,11 @@ Route::middleware(['auth', 'role:property_manager'])
         Route::post('/payments', [ManagerPaymentController::class, 'store'])->name('payments.store');
         Route::get('/payments/{payment}', [ManagerPaymentController::class, 'show'])->name('payments.show');
         Route::post('/payments/{payment}/mark-paid', [ManagerPaymentController::class, 'markPaid'])->name('payments.mark-paid');
-        Route::post('/payments/{payment}/status', [ManagerPaymentController::class, 'updateStatus'])
-            ->name('payments.update-status');
+        Route::post('/payments/{payment}/status', [ManagerPaymentController::class, 'updateStatus'])->name('payments.update-status');
+
+        Route::post('/properties/{property}/images', [PropertyImageController::class, 'store'])->name('properties.images.store');
+        Route::delete('/properties/{property}/images/{image}', [PropertyImageController::class, 'destroy'])->name('properties.images.destroy');
+        Route::post('/properties/{property}/images/{image}/featured', [PropertyImageController::class, 'setFeatured'])->name('properties.images.featured');
 
     });
 
@@ -269,8 +273,11 @@ Route::middleware(['auth', 'role:admin'])
         Route::post('/payments', [AdminPaymentController::class, 'store'])->name('payments.store');
         Route::get('/payments/{payment}', [AdminPaymentController::class, 'show'])->name('payments.show');
         Route::post('/payments/{payment}/mark-paid', [AdminPaymentController::class, 'markPaid'])->name('payments.mark-paid');
-        Route::post('/payments/{payment}/status', [AdminPaymentController::class, 'updateStatus'])
-            ->name('payments.update-status');
+        Route::post('/payments/{payment}/status', [AdminPaymentController::class, 'updateStatus'])->name('payments.update-status');
+
+        Route::post('/properties/{property}/images', [PropertyImageController::class, 'store'])->name('properties.images.store');
+        Route::delete('/properties/{property}/images/{image}', [PropertyImageController::class, 'destroy'])->name('properties.images.destroy');
+        Route::post('/properties/{property}/images/{image}/featured', [PropertyImageController::class, 'setFeatured'])->name('properties.images.featured');
     });
 
     Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook']);

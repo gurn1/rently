@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
 @extends('layouts.public')
 
 @section('title', $property->title)
@@ -13,9 +14,9 @@
                 {{-- Featured image --}}
                 <div class="rounded-lg overflow-hidden bg-gray-200 h-96 mb-6">
                     @if($property->images->where('is_featured', true)->first())
-                        <img src="{{ $property->images->where('is_featured', true)->first()->path }}"
-                             alt="{{ $property->title }}"
-                             class="w-full h-full object-cover">
+                        <img src="{{ Storage::url($property->images->where('is_featured', true)->first()->path) }}"
+                            alt="{{ $property->title }}"
+                            class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex items-center justify-center text-gray-400">
                             No image available
@@ -28,9 +29,9 @@
                     <div class="grid grid-cols-4 gap-2 mb-8">
                         @foreach($property->images->where('is_featured', false) as $image)
                             <div class="h-24 rounded overflow-hidden bg-gray-200">
-                                <img src="{{ $image->path }}"
-                                     alt="{{ $property->title }}"
-                                     class="w-full h-full object-cover">
+                                <img src="{{ Storage::url($image->path) }}"
+                                    alt="{{ $property->title }}"
+                                    class="w-full h-full object-cover">
                             </div>
                         @endforeach
                     </div>

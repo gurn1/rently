@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
 @extends('layouts.portal')
 
 @section('title', 'Edit ' . $property->title)
@@ -12,7 +13,7 @@
             </a>
         </div>
 
-        <form method="POST" action="{{ route('manager.properties.update', $property) }}" class="space-y-6">
+        <form method="POST" action="{{ route('manager.properties.update', $property) }}" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -121,6 +122,8 @@
                     </div>
                 </div>
             </div>
+
+            @include('dashboard.partials.property-images')
 
             <div class="bg-white rounded-lg shadow p-6">
                 <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Amenities</h2>

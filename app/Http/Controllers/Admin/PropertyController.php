@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use App\Models\Property;
+use App\Models\PropertyImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -51,6 +52,8 @@ class PropertyController extends Controller
             'availability_status' => 'required|in:available,occupied,under_maintenance',
             'amenities'           => 'nullable|array',
             'amenities.*'         => 'exists:amenities,id',
+            'images'              => 'nullable|array|max:10',
+            'images.*'            => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         //$validated['property_manager_id'] = auth()->id();
@@ -70,6 +73,22 @@ class PropertyController extends Controller
         $validated['slug'] = $slug;
 
         $property = Property::create($validated);
+
+        // Handle image uploads
+        if ($request->hasFile('images')) {
+            $sortOrder = $property->images()->max('sort_order') ?? 0;
+            foreach ($request->file('images') as $file) {
+                if (!$file || !$file->isValid()) continue; // skip empty/invalid files
+                
+                $path = $file->store('properties/' . $property->id, 'public');
+                PropertyImage::create([
+                    'property_id' => $property->id,
+                    'path'        => $path,
+                    'is_featured' => $property->images()->count() === 0,
+                    'sort_order'  => ++$sortOrder,
+                ]);
+            }
+        }
 
         if (!empty($validated['amenities'])) {
             $property->amenities()->attach($validated['amenities']);
@@ -101,6 +120,7 @@ class PropertyController extends Controller
     {
         $this->authorize('update', $property);
         $amenities = Amenity::orderBy('name', 'asc')->get();
+        $property->load('images');
 
         return view('dashboard.admin.properties.edit', compact('property', 'amenities'));
     }
