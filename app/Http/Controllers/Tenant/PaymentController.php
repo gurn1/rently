@@ -84,7 +84,8 @@ class PaymentController extends Controller
 
         // If still pending, verify with Stripe directly
         if ($payment->status === 'pending' && $payment->stripe_payment_intent_id) {
-            $stripe = new \Stripe\StripeClient(config('cashier.secret'));
+            //$stripe = new \Stripe\StripeClient(config('cashier.secret'));
+            $stripe = new \Stripe\StripeClient(setting('stripe_secret'));
 
             try {
                 // Retrieve the checkout session
