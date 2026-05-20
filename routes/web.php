@@ -29,6 +29,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -211,6 +213,9 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/dashboard', function () {
             return view('dashboard.admin.dashboard');
         })->name('dashboard');
+
+        Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
 
         Route::resource('properties', AdminPropertyController::class)
             ->names([
