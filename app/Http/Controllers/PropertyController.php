@@ -13,11 +13,59 @@ class PropertyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $properties = Property::with(['images', 'amenities'])
-            ->latest()
-            ->paginate(12);
+        $query = Property::with(['images', 'amenities'])
+            ->where('availability_status', '!=', 'under_maintenance');
+
+        // Keyword search
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                ->orWhere('address', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Property type
+        if ($request->filled('type')) {
+            $query->where('property_type', $request->type);
+        }
+
+        // Bedrooms
+        if ($request->filled('bedrooms')) {
+            $query->where('bedrooms', '>=', $request->bedrooms);
+        }
+
+        // Bathrooms
+        if ($request->filled('bathrooms')) {
+            $query->where('bathrooms', '>=', $request->bathrooms);
+        }
+
+        // Price min
+        if ($request->filled('price_min')) {
+            $query->where('price', '>=', $request->price_min);
+        }
+
+        // Price max
+        if ($request->filled('price_max')) {
+            $query->where('price', '<=', $request->price_max);
+        }
+
+        // Availability
+        if ($request->filled('availability')) {
+            $query->where('availability_status', $request->availability);
+        }
+
+        // Sort
+        $sort = $request->get('sort', 'latest');
+        match($sort) {
+            'price_asc'  => $query->orderBy('price', 'asc'),
+            'price_desc' => $query->orderBy('price', 'desc'),
+            'bedrooms'   => $query->orderBy('bedrooms', 'desc'),
+            default      => $query->latest(),
+        };
+
+        $properties = $query->paginate(12)->withQueryString();
 
         return view('properties.index', compact('properties'));
     }
