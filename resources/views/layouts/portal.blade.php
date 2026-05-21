@@ -22,10 +22,10 @@
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
 
-    <body class="bg-gray-100 text-gray-900 antialiased h-full">
+    <body class="bg-gray-100 text-gray-900 antialiased min-h-screen">
 
         <main class="flex h-full">
-            <aside class="primary-navigation w-md bg-dark px-12 pt-8">
+            <aside class="primary-navigation w-md bg-dark px-12 pt-8 min-h-screen">
                 <div class="mb-10">
                     <a href="{{ route('dashboard') }}" class="text-xl font-bold text-highlight">
                         Rently
@@ -116,6 +116,10 @@
                             <a href="{{ route('admin.work-orders.index') }}"
                             class="text-white hover:text-indigo-600 transition {{ request()->routeIs('admin.work-orders.*') ? 'text-indigo-600 font-medium' : '' }}">
                                 Work Orders
+                            </a>
+                            <a href="{{ route('admin.settings.index') }}"
+                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('admin.payments.*') ? 'text-indigo-600 font-medium' : '' }}">
+                                Settings
                             </a>
                         @endrole
                     </div>
@@ -211,8 +215,10 @@
                         </div>
                     </div>
                 </header>
-                @include('partials.alert')
-                @yield('content')
+                <div class="p-12">
+                    @include('partials.alert')
+                    @yield('content')
+                </div>
             </div>
         </main>
     </body>

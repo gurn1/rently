@@ -3,7 +3,7 @@
 @section('title', 'Conversation with ' . $conversation->tenant->first_name)
 
 @section('content')
-    <div class="max-w-3xl mx-auto">
+    <div class="">
 
         <div class="mb-6">
             <a href="{{ route('manager.messages.index') }}"

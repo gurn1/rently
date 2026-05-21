@@ -4,7 +4,7 @@
 @section('title', 'Edit ' . $property->title)
 
 @section('content')
-    <div class="max-w-3xl mx-auto">
+    <div class="">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-2xl font-bold text-gray-900">Edit Property</h1>
             <a href="{{ route('manager.dashboard') }}"

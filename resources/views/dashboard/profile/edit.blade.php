@@ -14,7 +14,7 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
 @section('title', 'My Profile')
 
 @section('content')
-    <div class="max-w-3xl mx-auto">
+    <div class="">
         <div class="mb-8">
             <h1 class="text-2xl font-bold text-gray-900">My Profile</h1>
             <p class="text-gray-500 mt-1">Manage your personal information.</p>
@@ -59,13 +59,13 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                         <input type="text" name="first_name" value="{{ old('first_name', $user->first_name) }}"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                               class="input">
                         @error('first_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                         <input type="text" name="last_name" value="{{ old('last_name', $user->last_name) }}"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                               class="input">
                         @error('last_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
@@ -73,7 +73,7 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                     <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                           class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                           class="input">
                     @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
@@ -86,13 +86,13 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Legal Name</label>
                         <input type="text" name="legal_name" value="{{ old('legal_name', $profile->legal_name) }}"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                               class="input">
                         @error('legal_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Preferred Name</label>
                         <input type="text" name="preferred_name" value="{{ old('preferred_name', $profile->preferred_name) }}"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                               class="input">
                         @error('preferred_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
@@ -101,13 +101,13 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                         <input type="text" name="phone" value="{{ old('phone', $profile->phone) }}"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                               class="input">
                         @error('phone') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Home Address</label>
                         <input type="text" name="address" value="{{ old('address', $profile->address) }}"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                               class="input">
                         @error('address') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
@@ -122,14 +122,14 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
                         <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
                         <input type="text" name="emergency_contact_name"
                                value="{{ old('emergency_contact_name', $profile->emergency_contact_name) }}"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                               class="input">
                         @error('emergency_contact_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                         <input type="text" name="emergency_contact_phone"
                                value="{{ old('emergency_contact_phone', $profile->emergency_contact_phone) }}"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                               class="input">
                         @error('emergency_contact_phone') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
@@ -137,7 +137,7 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
                         <input type="text" name="emergency_contact_relationship"
                                value="{{ old('emergency_contact_relationship', $profile->emergency_contact_relationship) }}"
                                placeholder="e.g. Spouse, Parent"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                               class="input">
                         @error('emergency_contact_relationship') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>

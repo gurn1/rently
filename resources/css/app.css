@@ -4,3 +4,13 @@
   --color-dark: #232E42;
   --color-highlight: #CE2954;
 }
+
+@layer components {
+  .input {
+    @apply w-full rounded-lg border border-gray-300 px-4 py-2;
+  }
+
+  .input:focus {
+    @apply border-highlight outline-none ring-2 ring-highlight/20;
+  }
+}
