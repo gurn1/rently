@@ -142,12 +142,12 @@ stripe listen --forward-to localhost:8000/stripe/webhook
 
 | File | Contents |
 |------|---------|
-| [schema.md](schema.md) | Database tables, columns, ERD diagram |
-| [models.md](models.md) | Eloquent models and relationships |
-| [routes.md](routes.md) | Routes, middleware, naming conventions |
-| [controllers.md](controllers.md) | Controller index by role |
-| [policies.md](policies.md) | Authorization policies per model |
-| [notifications.md](notifications.md) | Notification classes and triggers |
-| [views.md](views.md) | View structure and layout system |
-| [payments.md](payments.md) | Payment flow, Stripe integration, scheduled commands |
-| [features.md](features.md) | Feature progress and branch reference |
+| [schema.md](docs/schema.md) | Database tables, columns, ERD diagram |
+| [models.md](docs/models.md) | Eloquent models and relationships |
+| [routes.md](docs/routes.md) | Routes, middleware, naming conventions |
+| [controllers.md](docs/controllers.md) | Controller index by role |
+| [policies.md](docs/policies.md) | Authorization policies per model |
+| [notifications.md](docs/notifications.md) | Notification classes and triggers |
+| [views.md](docs/views.md) | View structure and layout system |
+| [payments.md](docs/payments.md) | Payment flow, Stripe integration, scheduled commands |
+| [features.md](docs/features.md) | Feature progress and branch reference |
