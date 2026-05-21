@@ -1,7 +1,6 @@
-@php use Illuminate\Support\Facades\Storage; @endphp
-
-{{-- Notification bell --}}
-@php
+@php 
+    use Illuminate\Support\Facades\Storage;
+    
     $notifications = auth()->user()->unreadNotifications->take(5);
     $unreadCount = auth()->user()->unreadNotifications->count();
 
@@ -11,6 +10,8 @@
         'tenant' => 'tenant',
         default => 'tenant'
     };
+    
+    $profile = auth()->user()->profile;
 @endphp
 <!DOCTYPE html>
 <html class="h-full" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -20,124 +21,22 @@
         <title>@yield('title', 'Portal') — {{ setting('site_name', 'Rently') }}</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Material+Symbols+Outlined" rel="stylesheet">
     </head>
 
     <body class="bg-gray-100 text-gray-900 antialiased min-h-screen">
 
         <main class="flex h-full">
-            <aside class="primary-navigation w-md bg-dark px-12 pt-8 min-h-screen">
-                <div class="mb-10">
-                    <a href="{{ route('dashboard') }}" class="text-xl font-bold text-highlight">
+            <aside class="primary-navigation w-sm bg-dark px-12 pt-8 min-h-screen">
+                <div class="mb-8">
+                    <a href="{{ route($rolePrefix . '.dashboard') }}" class="text-xl font-bold text-highlight">
                         {{ setting('site_name', 'Rently') }}
                     </a>
                 </div>
-                <nav class="text-base flex flex-col">
-                    <div class="flex flex-col">
-                        <span>Main</span>
-                        @role('tenant')
-                            <a href="{{ route('tenant.dashboard') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('tenant.dashboard') ? 'text-indigo-600 font-medium' : '' }}">
-                                Dashboard
-                            </a>
-                            <a href="{{ route('tenant.leases.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('tenant.leases.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                My Lease
-                            </a>
-                            <a href="{{ route('tenant.payments.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('tenant.payments.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Payments
-                            </a>
-                            <a href="{{ route('tenant.documents.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('tenant.documents.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Documents
-                            </a>
-                            <a href="{{ route('tenant.work-orders.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('tenant.work-orders.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Work Orders
-                            </a>
-                            <a href="{{ route('tenant.messages.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('tenant.messages.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Messages
-                            </a>
-                        @endrole
-
-                        @role('property_manager')
-                            <a href="{{ route('manager.dashboard') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('manager.dashboard') ? 'text-indigo-600 font-medium' : '' }}">
-                                Dashboard
-                            </a>
-                            <a href="{{ route('manager.properties.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('manager.properties.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Properties
-                            </a>
-                            <a href="{{ route('manager.leases.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('manager.leases.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Leases
-                            </a>
-                            <a href="{{ route('manager.payments.index') }}"
-                                class="text-white hover:text-indigo-600 transition {{ request()->routeIs('manager.payments.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Payments
-                            </a>
-                            <a href="{{ route('manager.documents.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('manager.documents.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Documents
-                            </a>
-                            <a href="{{ route('manager.work-orders.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('manager.work-orders.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Work Orders
-                            </a>
-                            <a href="{{ route('manager.messages.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('manager.messages.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Messages
-                            </a>
-                        @endrole
-
-                        @role('admin')
-                            <a href="{{ route('admin.dashboard') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('admin.dashboard') ? 'text-indigo-600 font-medium' : '' }}">
-                                Dashboard
-                            </a>
-                            <a href="{{ route('admin.properties.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('admin.properties.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Properties
-                            </a>
-                            <a href="{{ route('admin.leases.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('admin.leases.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Leases
-                            </a>
-                            <a href="{{ route('admin.payments.index') }}"
-                                class="text-white hover:text-indigo-600 transition {{ request()->routeIs('admin.payments.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Payments
-                            </a>
-                            <a href="{{ route('admin.documents.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('admin.documents.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Documents
-                            </a>
-                            <a href="{{ route('admin.work-orders.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('admin.work-orders.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Work Orders
-                            </a>
-                            <a href="{{ route('admin.settings.index') }}"
-                            class="text-white hover:text-indigo-600 transition {{ request()->routeIs('admin.payments.*') ? 'text-indigo-600 font-medium' : '' }}">
-                                Settings
-                            </a>
-                        @endrole
-                    </div>
-
-                    <div class="flex flex-col mt-12">
-                        <span>You</span>
-                        <a href="{{ route($rolePrefix . '.profile.edit') }}" 
-                        class="text-white hover:text-indigo-600 transition {{ request()->routeIs('tenant.messages.*') ? 'text-indigo-600 font-medium' : '' }}">
-                            Profile
-                        </a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit"
-                                    class="text-white transition">
-                                Logout
-                            </button>
-                        </form>
-                    </div>
+                <nav class="text-base flex flex-col sticky top-10 z-50">
+                    @include('dashboard.partials.navigation-items')
                 </nav>
             </aside>
 
@@ -145,30 +44,6 @@
                 <header class="primary-header bg-white shadow-sm sticky top-0 z-50">
                     <div class="mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-end items-center">
                         <div class="flex items-center gap-4 text-sm">
-
-                            {{-- Profile image or initials --}}
-                            @php $profile = auth()->user()->profile; @endphp
-                            <a href="{{ route($rolePrefix . '.profile.edit') }}" class="flex items-center gap-2 hover:opacity-80 transition">
-                                <div class="w-8 h-8 rounded-full overflow-hidden bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                                    @if($profile?->profile_image)
-                                        <img src="{{ Storage::url($profile->profile_image) }}"
-                                            alt="{{ auth()->user()->first_name }}"
-                                            class="w-full h-full object-cover">
-                                    @else
-                                        <span class="text-xs font-bold text-indigo-600">
-                                            {{ strtoupper(substr(auth()->user()->first_name, 0, 1)) }}{{ strtoupper(substr(auth()->user()->last_name, 0, 1)) }}
-                                        </span>
-                                    @endif
-                                </div>
-                                <span class="text-gray-500 hidden md:block">
-                                    {{ auth()->user()->first_name }}
-                                </span>
-                            </a>
-
-                            <span class="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded-full capitalize">
-                                {{ str_replace('_', ' ', auth()->user()->getRoleNames()->first()) }}
-                            </span>
-
                             <div class="relative" x-data="{ open: false }">
                                 <button @click="open = !open"
                                         class="relative text-gray-500 hover:text-indigo-600 transition">
@@ -212,6 +87,29 @@
                                     @endforelse
                                 </div>
                             </div>
+
+                            <span class="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded-full capitalize">
+                                {{ str_replace('_', ' ', auth()->user()->getRoleNames()->first()) }}
+                            </span>
+
+                            {{-- Profile image or initials --}}
+                            <a href="{{ route($rolePrefix . '.profile.edit') }}" class="flex items-center gap-2 hover:opacity-80 transition">
+                                <div class="w-8 h-8 rounded-full overflow-hidden bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                                    @if($profile?->profile_image)
+                                        <img src="{{ Storage::url($profile->profile_image) }}"
+                                            alt="{{ auth()->user()->first_name }}"
+                                            class="w-full h-full object-cover">
+                                    @else
+                                        <span class="text-xs font-bold text-indigo-600">
+                                            {{ strtoupper(substr(auth()->user()->first_name, 0, 1)) }}{{ strtoupper(substr(auth()->user()->last_name, 0, 1)) }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <span class="text-gray-500 hidden md:block">
+                                    {{ auth()->user()->first_name }}
+                                </span>
+                            </a>
+
                         </div>
                     </div>
                 </header>

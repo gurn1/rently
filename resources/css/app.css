@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --color-dark: #232E42;
+  --font-sans: "Roboto", sans-serif;
+  --color-dark: #18212F;
   --color-highlight: #CE2954;
+  --color-light-text: #A3ADB6;
 }
 
 @layer components {
@@ -13,4 +15,13 @@
   .input:focus {
     @apply border-highlight outline-none ring-2 ring-highlight/20;
   }
+
+  .navigation-item {
+    @apply flex items-center gap-x-4 my-2.5 text-light-text hover:text-indigo-600 transition 
+  }
+
+  .navigation-item-active {
+    @apply text-indigo-600 font-medium
+  }
+
 }
