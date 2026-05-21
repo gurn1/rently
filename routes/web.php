@@ -210,9 +210,11 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard.admin.dashboard');
-        })->name('dashboard');
+        // Route::get('/dashboard', function () {
+        //     return view('dashboard.admin.dashboard');
+        // })->name('dashboard');
+
+        Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
         Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
