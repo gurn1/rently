@@ -63,7 +63,7 @@ class LeaseController extends Controller
 
         // Auto-generate payments if lease is active
         if ($lease->status === 'active') {
-            $paymentMethod = $request->input('payment_method', 'stripe');
+            $paymentMethod = $request->input('payment_method', setting('default_payment_method', 'stripe'));
             app(LeasePaymentService::class)->generatePayments($lease, $paymentMethod);
         }
 

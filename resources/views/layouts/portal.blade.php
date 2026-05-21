@@ -17,7 +17,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@yield('title', 'Portal') — Rently</title>
+        <title>@yield('title', 'Portal') — {{ setting('site_name', 'Rently') }}</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
@@ -28,7 +28,7 @@
             <aside class="primary-navigation w-md bg-dark px-12 pt-8 min-h-screen">
                 <div class="mb-10">
                     <a href="{{ route('dashboard') }}" class="text-xl font-bold text-highlight">
-                        Rently
+                        {{ setting('site_name', 'Rently') }}
                     </a>
                 </div>
                 <nav class="text-base flex flex-col">

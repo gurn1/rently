@@ -12,8 +12,10 @@ class SendPaymentReminders extends Command
 
     public function handle(): void
     {
+        $reminderDays = setting('payment_reminder_days', 3);
+
         $payments = Payment::where('status', 'pending')
-            ->whereBetween('due_date', [now(), now()->addDays(3)])
+            ->whereBetween('due_date', [now(), now()->addDays($reminderDays)])
             ->with(['tenant', 'lease.property'])
             ->get();
 

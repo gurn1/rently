@@ -10,6 +10,11 @@ class LeasePaymentService
 {
     public function generatePayments(Lease $lease, string $paymentMethod = 'stripe'): void
     {
+        // Respect the auto_generate_payments setting
+        if (!setting('auto_generate_payments', true)) {
+            return;
+        }
+
         $startDate = Carbon::parse($lease->start_date);
         $endDate   = $lease->end_date
             ? Carbon::parse($lease->end_date)
