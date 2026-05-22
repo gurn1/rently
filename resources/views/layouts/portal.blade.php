@@ -29,11 +29,9 @@
     <body class="bg-gray-100 text-gray-900 antialiased min-h-screen">
 
         <main class="flex h-full">
-            <aside class="primary-navigation w-sm bg-dark px-12 pt-8 min-h-screen">
-                <div class="mb-8">
-                    <a href="{{ route($rolePrefix . '.dashboard') }}" class="text-xl font-bold text-highlight">
-                        {{ setting('site_name', 'Rently') }}
-                    </a>
+            <aside class="primary-navigation w-sm bg-dark px-12 pt-10 min-h-screen">
+                <div class="mb-8 w-[120px]">
+                    @include('partials.logo', ['path' => route($rolePrefix . '.dashboard')])
                 </div>
                 <nav class="text-base flex flex-col sticky top-10 z-50">
                     @include('dashboard.partials.navigation-items')

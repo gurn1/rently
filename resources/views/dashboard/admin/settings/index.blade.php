@@ -29,7 +29,7 @@
     {{-- Settings form for active tab --}}
     @foreach($groups as $groupKey => $groupLabel)
         @if($activeTab === $groupKey)
-            <form method="POST" action="{{ route('admin.settings.update') }}" class="space-y-6">
+            <form method="POST" action="{{ route('admin.settings.update') }}" class="space-y-6" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="group" value="{{ $groupKey }}">
 
@@ -87,6 +87,23 @@
                                                name="{{ $setting->key }}"
                                                value="{{ $setting->value }}"
                                                class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+
+                                    @elseif($setting->key === 'site_logo')
+                                        <div class="space-y-3">
+                                            @if($setting->value)
+                                                <div class="flex items-center gap-4">
+                                                    <img src="{{ Storage::url($setting->value) }}"
+                                                        alt="Site Logo"
+                                                        class="h-12 object-contain">
+                                                    <span class="text-xs text-green-600">Logo is set</span>
+                                                </div>
+                                            @endif
+                                            <input type="file"
+                                                name="site_logo_file"
+                                                accept="image/png,image/jpg,image/jpeg,image/svg+xml,image/webp"
+                                                class="w-full text-sm text-gray-600 border border-gray-300 rounded p-2">
+                                            <p class="text-xs text-gray-400">PNG, JPG, SVG or WEBP.</p>
+                                        </div>
 
                                     @else
                                         <input type="text"

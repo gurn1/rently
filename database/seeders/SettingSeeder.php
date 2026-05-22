@@ -19,6 +19,14 @@ class SettingSeeder extends Seeder
                 'hint'  => 'The name of your portal displayed in the browser tab and emails.',
             ],
             [
+                'key'   => 'site_logo',
+                'value' => '',
+                'type'  => 'string',
+                'group' => 'general',
+                'label' => 'Site Logo',
+                'hint'  => 'Upload your portal logo. Displayed in the navigation bar.',
+            ],
+            [
                 'key'   => 'contact_email',
                 'value' => 'hello@rently.com',
                 'type'  => 'string',

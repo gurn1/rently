@@ -1,3 +1,5 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -10,7 +12,8 @@
 
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <a href="/" class="text-xl font-bold text-indigo-600">{{ setting('site_name', 'Rently') }}</a>
+            @include(partials.logo)
+
             <nav class="flex items-center gap-6 text-sm">
                 <a href="{{ route('properties.index') }}" 
                    class="text-gray-600 hover:text-indigo-600 transition">
