@@ -4,6 +4,7 @@
   --font-sans: "Roboto", sans-serif;
   --color-dark: #18212F;
   --color-highlight: #CE2954;
+  --color-teal: #26B8CD;
   --color-light-text: #A3ADB6;
 }
 
@@ -14,6 +15,10 @@
 
   .input:focus {
     @apply border-highlight outline-none ring-2 ring-highlight/20;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-gray-950 p-0 m-0 leading-none
   }
 
   .navigation-item {
