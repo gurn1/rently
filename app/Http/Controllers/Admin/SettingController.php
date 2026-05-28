@@ -17,6 +17,7 @@ class SettingController extends Controller
             'payments'      => 'Payments',
             'leases'        => 'Leases',
             'notifications' => 'Notifications',
+            'accounts'      => 'Accounts'
         ];
 
         return view('dashboard.admin.settings.index', compact('settings', 'groups'));
@@ -65,6 +66,8 @@ class SettingController extends Controller
             $setting->value = $value;
             $setting->save();
         }
+
+        cache()->forget('enable_frontend_registration');
 
         return redirect()->route('admin.settings.index', ['tab' => $group])
             ->with('success', ucfirst($group) . ' settings saved successfully.');

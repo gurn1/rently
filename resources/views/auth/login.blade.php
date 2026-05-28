@@ -4,7 +4,7 @@
 
     <h1 class="text-3xl text-center font-semibold mb-9">Login to your account</h1>
 
-    @if (Route::has('register'))
+    @if (Route::has('register') && setting('enable_frontend_registration'))
         <div class="size-sm text-center mb-4">
             Don't have an account? 
             <a class="underline mt-3 text-sm text-teal font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('register') }}">

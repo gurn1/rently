@@ -128,6 +128,16 @@ class SettingSeeder extends Seeder
                 'label' => 'Admin Notification Email',
                 'hint'  => 'Email address that receives admin-level notifications.',
             ],
+
+            // Account
+            [
+                'key'   => 'enable_frontend_registration',
+                'value' => '0',
+                'type'  => 'boolean',
+                'group' => 'accounts',
+                'label' => 'Enable Frontend Registration',
+                'hint'  => 'Allow guests to create an account.'
+            ]
         ];
 
         foreach ($settings as $setting) {
