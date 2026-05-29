@@ -6,6 +6,9 @@
   --color-highlight: #CE2954;
   --color-teal: #26B8CD;
   --color-light-text: #A3ADB6;
+  --color-properties: #FE6867;
+  --color-users: #FC930C;
+  --color-leases: #04DAE8;
 }
 
 @layer components {
@@ -27,6 +30,10 @@
 
   .navigation-item-active {
     @apply text-indigo-600 font-medium
+  }
+
+  .panel {
+    @apply bg-white rounded-lg shadow p-6
   }
 
 }

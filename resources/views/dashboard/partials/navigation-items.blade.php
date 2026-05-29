@@ -61,7 +61,7 @@
         class="navigation-item {{ request()->routeIs('admin.properties.*') ? 'navigation-item-active' : '' }}">
             <span class="material-symbols-outlined">house</span> Properties
         </a>
-        <a href="{{ route('admin.properties.index') }}"
+        <a href="{{ route('admin.users.index') }}"
         class="navigation-item {{ request()->routeIs('admin.users.*') ? 'navigation-item-active' : '' }}">
             <span class="material-symbols-outlined">group</span> Users
         </a>
