@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\Manager\DashboardController as ManagerDashboardController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Manager\PropertyController as ManagerPropertyController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 use App\Http\Controllers\Manager\ConversationController as ManagerConversationController;
@@ -49,7 +51,9 @@ Route::get('/dashboard', function () {
     abort(403);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-/** Breeze profile routes */
+/** 
+ * Breeze profile routes 
+ */
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -128,9 +132,11 @@ Route::middleware(['auth', 'role:property_manager'])
     ->prefix('manager')
     ->name('manager.')
     ->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard.manager.dashboard');
-        })->name('dashboard');
+        // Route::get('/dashboard', function () {
+        //     return view('dashboard.manager.dashboard');
+        // })->name('dashboard');
+
+        Route::get('/dashboard', [ManagerDashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('properties', ManagerPropertyController::class)
             ->names([
@@ -210,11 +216,8 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        // Route::get('/dashboard', function () {
-        //     return view('dashboard.admin.dashboard');
-        // })->name('dashboard');
 
-        Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
         Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
