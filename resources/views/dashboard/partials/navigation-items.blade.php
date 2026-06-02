@@ -34,6 +34,9 @@
         class="navigation-item {{ request()->routeIs('manager.properties.*') ? 'navigation-item-active' : '' }}">
             <span class="material-symbols-outlined">house</span> Properties
         </a>
+        <a href="{{ route('manager.users.index') }}"
+        class="navigation-item {{ request()->routeIs('manager.users.*') ? 'navigation-item-active' : '' }}">
+            <span class="material-symbols-outlined">group</span> Tenants
         <a href="{{ route('manager.leases.index') }}"
         class="navigation-item {{ request()->routeIs('manager.leases.*') ? 'navigation-item-active' : '' }}">
             <span class="material-symbols-outlined">contract</span> Leases
