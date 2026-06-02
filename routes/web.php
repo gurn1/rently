@@ -19,6 +19,7 @@ use App\Http\Controllers\Manager\DocumentController as ManagerDocumentController
 use App\Http\Controllers\Tenant\DocumentController as TenantDocumentController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Manager\UserController as ManagerUserController;
 use App\Http\Controllers\Tenant\PaymentController as TenantPaymentController;
 use App\Http\Controllers\Manager\PaymentController as ManagerPaymentController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
@@ -132,9 +133,6 @@ Route::middleware(['auth', 'role:property_manager'])
     ->prefix('manager')
     ->name('manager.')
     ->group(function () {
-        // Route::get('/dashboard', function () {
-        //     return view('dashboard.manager.dashboard');
-        // })->name('dashboard');
 
         Route::get('/dashboard', [ManagerDashboardController::class, 'index'])->name('dashboard');
 
@@ -177,6 +175,13 @@ Route::middleware(['auth', 'role:property_manager'])
                 'edit'    => 'work-orders.edit',
                 'update'  => 'work-orders.update',
                 'destroy' => 'work-orders.destroy',
+            ]);
+
+        Route::resource('users', ManagerUserController::class)
+            ->only(['index', 'show'])
+            ->names([
+                'index'   => 'users.index',
+                'show'    => 'users.show',
             ]);
 
         Route::post('/work-orders/{workOrder}/updates', [WorkOrderUpdateController::class, 'store'])
