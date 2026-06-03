@@ -14,6 +14,10 @@
 @layer components {
   .input {
     @apply w-full rounded-lg border border-gray-300 px-4 py-2;
+
+    &:focus {
+      @apply border-highlight outline-none ring-2 ring-highlight/20;
+    }
   }
 
   .input:focus {
@@ -34,6 +38,66 @@
 
   .panel {
     @apply bg-white rounded-lg shadow p-6
+  }
+
+  .data-table {
+    @apply w-full border-separate border-spacing-y-2 text-sm text-left;
+
+    th, td {
+        @apply py-4 px-6 text-left;
+    }
+
+    thead {
+      th, td {
+        @apply bg-white uppercase text-xs text-gray-600;
+
+        &:first-child {
+          @apply rounded-l-lg shadow-[inset_0_1px_0_theme(colors.gray.200),inset_0_-1px_0_theme(colors.gray.200),inset_1px_0_0_theme(colors.gray.200)];
+        }
+
+        &:last-child {
+          @apply rounded-r-lg shadow-[inset_0_1px_0_theme(colors.gray.200),inset_0_-1px_0_theme(colors.gray.200),inset_-1px_0_0_theme(colors.gray.200)];
+        }
+
+        &:not(:first-child):not(:last-child) {
+          @apply shadow-[inset_0_1px_0_theme(colors.gray.200),inset_0_-1px_0_theme(colors.gray.200)];
+        }
+
+      }
+    }
+
+    tbody {
+      td {
+        @apply bg-white hover:bg-gray-50 transition text-gray-600;
+
+        &:first-child {
+          @apply rounded-l-lg shadow-[inset_0_1px_0_theme(colors.gray.200),inset_0_-1px_0_theme(colors.gray.200),inset_1px_0_0_theme(colors.gray.200)];
+        }
+
+        &:last-child {
+          @apply rounded-r-lg shadow-[inset_0_1px_0_theme(colors.gray.200),inset_0_-1px_0_theme(colors.gray.200),inset_-1px_0_0_theme(colors.gray.200)];
+        }
+
+        &:not(:first-child):not(:last-child) {
+          @apply shadow-[inset_0_1px_0_theme(colors.gray.200),inset_0_-1px_0_theme(colors.gray.200)];
+        }
+      }
+    }
+  }
+
+  .panel .data-table {
+    
+    thead {
+      th, td {
+        @apply !bg-gray-100 !shadow-none;
+      }
+    }
+
+    tbody {
+      td {
+        @apply bg-none
+      }
+    }
   }
 
 }

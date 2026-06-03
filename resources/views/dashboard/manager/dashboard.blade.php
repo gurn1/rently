@@ -14,35 +14,41 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="panel flex gap-5">
             <div class="aspect-square w-[20%] bg-properties rounded-full flex items-center justify-center">
-                <span class="material-symbols-outlined font-light !text-5xl mt-[-5px]  text-white">other_houses</span>
+                <a href="{{ route('manager.properties.index') }}"><span class="material-symbols-outlined font-light !text-5xl mt-[-5px]  text-white">other_houses</span></a>
             </div>
             <div class="flex flex-col justify-center">
-                <p class="text-xl font-semibold leading-none mb-1">Properties</p>
-                <p class="text-4xl font-bold text-gray-700 leading-none">
-                    {{ auth()->user()->properties->count() }}
-                </p>
+                <a href="{{ route('manager.properties.index') }}">
+                    <p class="text-xl font-semibold leading-none mb-1">Properties</p>
+                    <p class="text-4xl font-bold text-gray-700 leading-none">
+                        {{ auth()->user()->properties->count() }}
+                    </p>
+                </a>
             </div>
         </div>
         <div class="panel flex gap-5">
             <div class="aspect-square w-[20%] bg-users rounded-full flex items-center justify-center">
-                <span class="material-symbols-outlined font-light !text-5xl mt-[-5px]  text-white">groups</span>
+                <a href="{{ route('manager.users.index') }}"><span class="material-symbols-outlined font-light !text-5xl mt-[-5px]  text-white">groups</span></a>
             </div>
             <div class="flex flex-col justify-center">
-                <p class="text-xl font-semibold leading-none mb-1">Tenants</p>
-                <p class="text-4xl font-bold text-gray-700 leading-none">
-                    {{ auth()->user()->tenants->count() }}
-                </p>
+                <a href="{{ route('manager.users.index') }}">
+                    <p class="text-xl font-semibold leading-none mb-1">Tenants</p>
+                    <p class="text-4xl font-bold text-gray-700 leading-none">
+                        {{ auth()->user()->tenants->count() }}
+                    </p>
+                </a>
             </div>
         </div>
         <div class="panel flex gap-5">
             <div class="aspect-square w-[20%] bg-leases rounded-full flex items-center justify-center">
-                <span class="material-symbols-outlined font-light !text-5xl mt-[-5px]  text-white">contract</span>
+                <a href="{{ route('manager.leases.index') }}"><span class="material-symbols-outlined font-light !text-5xl mt-[-5px]  text-white">contract</span></a>
             </div>
             <div class="flex flex-col justify-center">
-                <p class="text-xl font-semibold leading-none mb-1">Leases</p>
-                <p class="text-4xl font-bold text-gray-700 leading-none">
-                    {{ auth()->user()->properties->sum(fn($p) => $p->leases->where('status', 'active')->count()) }}
-                </p>
+                <a href="{{ route('manager.leases.index') }}">
+                    <p class="text-xl font-semibold leading-none mb-1">Leases</p>
+                    <p class="text-4xl font-bold text-gray-700 leading-none">
+                        {{ auth()->user()->properties->sum(fn($p) => $p->leases->where('status', 'active')->count()) }}
+                    </p>
+                </a>
             </div>
         </div>
     </div>
@@ -90,31 +96,31 @@
                 </div>
             @else
                 <div class="overflow-hidden">
-                    <table class="w-full text-sm">
-                        <thead class="border-b">
+                    <table class="data-table">
+                        <thead>
                             <tr>
-                                <th class="text-left px-6 py-3 text-gray-500 font-medium">Date Created</th>
-                                <th class="text-left px-6 py-3 text-gray-500 font-medium">Issue</th>
-                                <th class="text-left px-6 py-3 text-gray-500 font-medium">Property</th>
-                                <th class="text-left px-6 py-3 text-gray-500 font-medium">Raised By</th>
-                                <th class="text-left px-6 py-3 text-gray-500 font-medium">Priority</th>
-                                <th class="text-left px-6 py-3 text-gray-500 font-medium">Status</th>
+                                <th>Date Created</th>
+                                <th>Issue</th>
+                                <th>Property</th>
+                                <th>Raised By</th>
+                                <th>Priority</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y">
+                        <tbody>
                             @foreach($workOrders as $workOrder)
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="px-6 py-4">{{ $workOrder->created_at->format('d/m/Y') }}</td>
-                                    <td class="px-6 py-4 font-medium text-gray-900">
+                                <tr>
+                                    <td>{{ $workOrder->created_at->format('d/m/Y') }}</td>
+                                    <td class="font-medium text-gray-900">
                                         <a href="{{ route('manager.work-orders.show', $workOrder) }}">{{ $workOrder->title }}</a>
                                     </td>
-                                    <td class="px-6 py-4 text-gray-600">
+                                    <td>
                                         {{ $workOrder->property->title }}
                                     </td>
-                                    <td class="px-6 py-4 text-gray-600">
+                                    <td>
                                         {{ $workOrder->raisedBy->first_name }} {{ $workOrder->raisedBy->last_name }}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td>
                                         <span class="text-xs px-2 py-1 rounded capitalize
                                             {{ $workOrder->priority === 'urgent' ? 'bg-red-100 text-red-700' :
                                             ($workOrder->priority === 'high' ? 'bg-orange-100 text-orange-700' :
@@ -123,7 +129,7 @@
                                             {{ $workOrder->priority }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td>
                                         <span class="text-xs px-2 py-1 rounded capitalize
                                             {{ $workOrder->status === 'resolved' ? 'bg-green-100 text-green-700' :
                                             ($workOrder->status === 'open' ? 'bg-red-100 text-red-700' :
