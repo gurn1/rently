@@ -19,31 +19,31 @@
             <p class="text-xl">No work orders yet.</p>
         </div>
     @else
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+        <div>
+            <table class="data-table">
+                <thead>
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Title</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Property</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Raised By</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Priority</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Status</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Actions</th>
+                        <th>Title</th>
+                        <th>Property</th>
+                        <th>Raised By</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y">
+                <tbody>
                     @foreach($workOrders as $workOrder)
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="px-6 py-4 font-medium text-gray-900">
+                        <tr>
+                            <td class="text-gray-900">
                                 {{ $workOrder->title }}
                             </td>
-                            <td class="px-6 py-4 text-gray-600">
+                            <td>
                                 {{ $workOrder->property->title }}
                             </td>
-                            <td class="px-6 py-4 text-gray-600">
+                            <td>
                                 {{ $workOrder->raisedBy->first_name }} {{ $workOrder->raisedBy->last_name }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td>
                                 <span class="text-xs px-2 py-1 rounded capitalize
                                     {{ $workOrder->priority === 'urgent' ? 'bg-red-100 text-red-700' :
                                        ($workOrder->priority === 'high' ? 'bg-orange-100 text-orange-700' :
@@ -52,7 +52,7 @@
                                     {{ $workOrder->priority }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4">
+                            <td>
                                 <span class="text-xs px-2 py-1 rounded capitalize
                                     {{ $workOrder->status === 'resolved' ? 'bg-green-100 text-green-700' :
                                        ($workOrder->status === 'open' ? 'bg-red-100 text-red-700' :
@@ -60,7 +60,7 @@
                                     {{ str_replace('_', ' ', $workOrder->status) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4">
+                            <td>
                                 <div class="flex items-center gap-3">
                                     <a href="{{ route('manager.work-orders.show', $workOrder) }}"
                                        class="text-indigo-600 hover:underline">View</a>

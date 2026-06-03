@@ -13,33 +13,33 @@
             <p class="text-xl">No documents found.</p>
         </div>
     @else
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+        <div>
+            <table class="data-table">
+                <thead>
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Title</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Tenant</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Uploaded By</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Type</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Signature</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Date</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Actions</th>
+                        <th>Title</th>
+                        <th>Tenant</th>
+                        <th>Uploaded By</th>
+                        <th>Type</th>
+                        <th>Signature</th>
+                        <th>Date</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y">
+                <tbody>
                     @foreach($documents as $document)
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="px-6 py-4 font-medium text-gray-900">{{ $document->title }}</td>
-                            <td class="px-6 py-4 text-gray-600">
+                        <tr>
+                            <td class="text-gray-900">{{ $document->title }}</td>
+                            <td>
                                 {{ $document->tenant->first_name }} {{ $document->tenant->last_name }}
                             </td>
-                            <td class="px-6 py-4 text-gray-600">
+                            <td>
                                 {{ $document->uploadedBy->first_name }} {{ $document->uploadedBy->last_name }}
                             </td>
-                            <td class="px-6 py-4 text-gray-600 capitalize">
+                            <td class=" capitalize">
                                 {{ str_replace('_', ' ', $document->document_type) }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td>
                                 @if($document->requires_signature)
                                     <span class="text-xs px-2 py-1 rounded
                                         {{ $document->is_signed ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
@@ -49,10 +49,10 @@
                                     <span class="text-xs text-gray-400">Not required</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-gray-600">
+                            <td>
                                 {{ $document->created_at->format('d/m/Y') }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td>
                                 <a href="{{ route('admin.documents.show', $document) }}"
                                    class="text-indigo-600 hover:underline">View</a>
                             </td>

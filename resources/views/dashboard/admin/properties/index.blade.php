@@ -23,40 +23,40 @@
             </a>
         </div>
     @else
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+        <div>
+            <table class="data-table">
+                <thead>
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Property</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Type</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Price</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Status</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Actions</th>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y">
+                <tbody>
                     @foreach($properties as $property)
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="px-6 py-4">
+                        <tr>
+                            <td>
                                 <a href="{{ route('admin.properties.show', $property) }}"
                                    class="font-medium text-gray-900 hover:text-indigo-600 transition">
                                     {{ $property->title }}
                                 </a>
                                 <p class="text-gray-400 text-xs mt-1">{{ $property->address }}</p>
                             </td>
-                            <td class="px-6 py-4 capitalize text-gray-600">
+                            <td class="capitalize text-gray-600">
                                 {{ str_replace('_', ' ', $property->property_type) }}
                             </td>
-                            <td class="px-6 py-4 text-gray-600">
+                            <td class="text-gray-600">
                                 £{{ number_format($property->price, 0) }}/mo
                             </td>
-                            <td class="px-6 py-4">
+                            <td>
                                 <span class="text-xs px-2 py-1 rounded capitalize
                                     {{ $property->availability_status === 'available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                                     {{ str_replace('_', ' ', $property->availability_status) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4">
+                            <td>
                                 <div class="flex items-center gap-3">
                                     <a href="{{ route('admin.properties.edit', $property) }}"
                                        class="text-indigo-600 hover:underline">Edit</a>

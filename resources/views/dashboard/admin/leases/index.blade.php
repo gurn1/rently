@@ -19,43 +19,43 @@
             <p class="text-xl">No leases found.</p>
         </div>
     @else
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
+        <div>
+            <table class="data-table">
+                <thead>
                     <tr>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Tenant</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Property</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Manager</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Rent</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Start Date</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">End Date</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Status</th>
-                        <th class="text-left px-6 py-3 text-gray-500 font-medium">Actions</th>
+                        <th>Tenant</th>
+                        <th>Property</th>
+                        <th>Manager</th>
+                        <th>Rent</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y">
+                <tbody>
                     @foreach($leases as $lease)
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="px-6 py-4 font-medium text-gray-900">
+                        <tr>
+                            <td class=" text-gray-900">
                                 {{ $lease->tenant->first_name }} {{ $lease->tenant->last_name }}
                             </td>
-                            <td class="px-6 py-4 text-gray-600">
+                            <td>
                                 {{ $lease->property->title }}
                             </td>
-                            <td class="px-6 py-4 text-gray-600">
+                            <td>
                                 {{ $lease->property->propertyManager?->first_name }}
                                 {{ $lease->property->propertyManager?->last_name }}
                             </td>
-                            <td class="px-6 py-4 text-gray-600">
+                            <td>
                                 £{{ number_format($lease->rent_amount, 0) }}/mo
                             </td>
-                            <td class="px-6 py-4 text-gray-600">
+                            <td>
                                 {{ \Carbon\Carbon::parse($lease->start_date)->format('d/m/Y') }}
                             </td>
-                            <td class="px-6 py-4 text-gray-600">
+                            <td>
                                 {{ $lease->end_date ? \Carbon\Carbon::parse($lease->end_date)->format('d/m/Y') : 'Ongoing' }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td>
                                 <span class="text-xs px-2 py-1 rounded capitalize
                                     {{ $lease->status === 'active' ? 'bg-green-100 text-green-700' :
                                        ($lease->status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
@@ -63,7 +63,7 @@
                                     {{ $lease->status }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4">
+                            <td>
                                 <div class="flex items-center gap-3">
                                     <a href="{{ route('admin.leases.show', $lease) }}"
                                        class="text-indigo-600 hover:underline">View</a>

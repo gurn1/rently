@@ -40,11 +40,21 @@
     @apply bg-white rounded-lg shadow p-6
   }
 
+  .panel-title {
+    @apply font-semibold text-gray-700 mb-4;
+  }
+
   .data-table {
     @apply w-full border-separate border-spacing-y-2 text-sm text-left;
 
     th, td {
         @apply py-4 px-6 text-left;
+    }
+
+    &.small {
+      th, td {
+        @apply py-2 px-4;
+      }
     }
 
     thead {
@@ -67,8 +77,12 @@
     }
 
     tbody {
+      tr {
+        @apply hover:bg-gray-50 transition;
+      }
+
       td {
-        @apply bg-white hover:bg-gray-50 transition text-gray-600;
+        @apply bg-white text-gray-600;
 
         &:first-child {
           @apply rounded-l-lg shadow-[inset_0_1px_0_theme(colors.gray.200),inset_0_-1px_0_theme(colors.gray.200),inset_1px_0_0_theme(colors.gray.200)];
@@ -94,6 +108,8 @@
     }
 
     tbody {
+  
+
       td {
         @apply bg-none
       }

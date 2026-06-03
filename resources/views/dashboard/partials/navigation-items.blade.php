@@ -85,7 +85,7 @@
             <span class="material-symbols-outlined">construction</span> Work Orders
         </a>
         <a href="{{ route('admin.settings.index') }}"
-        class="navigation-item {{ request()->routeIs('admin.payments.*') ? 'navigation-item-active' : '' }}">
+        class="navigation-item {{ request()->routeIs('admin.settings.*') ? 'navigation-item-active' : '' }}">
             <span class="material-symbols-outlined">settings</span> Settings
         </a>
     @endrole
