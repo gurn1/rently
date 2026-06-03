@@ -24,20 +24,32 @@
     @apply border-highlight outline-none ring-2 ring-highlight/20;
   }
 
+  .select {
+    @apply w-full border border-gray-300 rounded shadow-sm text-sm bg-white px-4 py-2;
+}
+
+  .checkbox {
+    @apply rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500;
+  }
+
+  .radio {
+    @apply border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500;
+  }
+
   .label {
-    @apply block text-sm font-medium text-gray-950 p-0 m-0 leading-none
+    @apply block text-sm font-medium text-gray-950 p-0 m-0 leading-none;
   }
 
   .navigation-item {
-    @apply flex items-center gap-x-4 my-2.5 text-light-text hover:text-indigo-600 transition 
+    @apply flex items-center gap-x-4 my-2.5 text-light-text hover:text-indigo-600 transition;
   }
 
   .navigation-item-active {
-    @apply text-indigo-600 font-medium
+    @apply text-indigo-600 font-medium;
   }
 
   .panel {
-    @apply bg-white rounded-lg shadow p-6
+    @apply bg-white rounded-lg shadow p-6;
   }
 
   .panel-title {

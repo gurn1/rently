@@ -60,11 +60,11 @@
                                         </div>
 
                                     @elseif($setting->type === 'encrypted')
-                                        <input type="password"
+                                        <x-text-input type="password"
                                                name="{{ $setting->key }}"
                                                placeholder="{{ $setting->value ? '••••••••••••••••' : 'Not set' }}"
                                                autocomplete="new-password"
-                                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                                               class=""/>
                                         @if($setting->value)
                                             <p class="text-xs text-green-600 mt-1">✓ Value is set. Leave blank to keep existing.</p>
                                         @else
@@ -72,21 +72,17 @@
                                         @endif
 
                                     @elseif($setting->key === 'default_payment_method')
-                                        <select name="{{ $setting->key }}"
-                                                class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-                                            <option value="stripe" {{ $setting->value === 'stripe' ? 'selected' : '' }}>
-                                                Stripe (Online)
-                                            </option>
-                                            <option value="manual" {{ $setting->value === 'manual' ? 'selected' : '' }}>
-                                                Manual (Bank Transfer / Cash)
-                                            </option>
-                                        </select>
+                                        <x-select 
+                                            name="{{ $setting->key }}"
+                                            :selected="$setting->value"
+                                            :options="['stripe' => 'Stripe (Online)', 'manual' => 'Manual (Bank Transfer / Cash)']"
+                                        />
 
                                     @elseif($setting->type === 'integer')
-                                        <input type="number"
+                                        <x-text-input type="number"
                                                name="{{ $setting->key }}"
                                                value="{{ $setting->value }}"
-                                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                                               class=""/>
 
                                     @elseif($setting->key === 'site_logo')
                                         <div class="space-y-3">
@@ -98,18 +94,18 @@
                                                     <span class="text-xs text-green-600">Logo is set</span>
                                                 </div>
                                             @endif
-                                            <input type="file"
+                                            <x-text-input type="file"
                                                 name="site_logo_file"
                                                 accept="image/png,image/jpg,image/jpeg,image/svg+xml,image/webp"
-                                                class="w-full text-sm text-gray-600 border border-gray-300 rounded p-2">
+                                                class="w-full text-sm text-gray-600 border border-gray-300 rounded p-2"/>
                                             <p class="text-xs text-gray-400">PNG, JPG, SVG or WEBP.</p>
                                         </div>
 
                                     @else
-                                        <input type="text"
+                                        <x-text-input type="text"
                                                name="{{ $setting->key }}"
                                                value="{{ $setting->value }}"
-                                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                                               class=""/>
                                     @endif
                                 </div>
                             </div>
