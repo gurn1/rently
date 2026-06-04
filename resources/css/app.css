@@ -25,8 +25,12 @@
   }
 
   .select {
-    @apply w-full border border-gray-300 rounded shadow-sm text-sm bg-white px-4 py-2;
-}
+    @apply appearance-none w-full border border-gray-300 rounded shadow-sm text-sm bg-white px-4 py-2;
+  
+    &:focus ~ span {
+      @apply rotate-180;
+    }
+  }
 
   .checkbox {
     @apply rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500;
