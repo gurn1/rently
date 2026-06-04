@@ -33,7 +33,7 @@
                 @csrf
                 <input type="hidden" name="group" value="{{ $groupKey }}">
 
-                <div class="bg-white rounded-lg shadow divide-y">
+                <div class="bg-white rounded-lg shadow panel">
                     @forelse($settings->get($groupKey, collect()) as $setting)
                         <div class="p-6">
                             <div class="flex flex-col md:flex-row md:items-start gap-4">
@@ -48,12 +48,11 @@
                                 <div class="md:w-2/3">
                                     @if($setting->type === 'boolean')
                                         <div class="flex items-center gap-3">
-                                            <input type="checkbox"
-                                                   name="{{ $setting->key }}"
-                                                   id="{{ $setting->key }}"
-                                                   value="1"
-                                                   {{ $setting->value ? 'checked' : '' }}
-                                                   class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                            <x-checkbox-input
+                                                name="{{ $setting->key }}"
+                                                id="{{ $setting->key }}"
+                                                value="1"
+                                                :checked="(bool) $setting->value" />
                                             <label for="{{ $setting->key }}" class="text-sm text-gray-600">
                                                 Enabled
                                             </label>
@@ -64,7 +63,7 @@
                                                name="{{ $setting->key }}"
                                                placeholder="{{ $setting->value ? '••••••••••••••••' : 'Not set' }}"
                                                autocomplete="new-password"
-                                               class=""/>
+                                               />
                                         @if($setting->value)
                                             <p class="text-xs text-green-600 mt-1">✓ Value is set. Leave blank to keep existing.</p>
                                         @else
@@ -96,8 +95,7 @@
                                             @endif
                                             <x-text-input type="file"
                                                 name="site_logo_file"
-                                                accept="image/png,image/jpg,image/jpeg,image/svg+xml,image/webp"
-                                                class="w-full text-sm text-gray-600 border border-gray-300 rounded p-2"/>
+                                                accept="image/png,image/jpg,image/jpeg,image/svg+xml,image/webp"/>
                                             <p class="text-xs text-gray-400">PNG, JPG, SVG or WEBP.</p>
                                         </div>
 
@@ -116,10 +114,9 @@
                 </div>
 
                 <div class="flex justify-end">
-                    <button type="submit"
-                            class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition text-sm">
-                        Save {{ $groupLabel }} Settings
-                    </button>
+                    <x-primary-button type="submit">
+                    {{ __('Save ' . $groupLabel . ' Settings') }}
+                    </x-primary-button>
                 </div>
             </form>
         @endif
