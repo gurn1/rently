@@ -11,7 +11,7 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
 
 @extends('layouts.portal')
 
-@section('title', 'My Profile')
+@section('title', 'Profile')
 
 @section('content')
     <div class="">
@@ -28,8 +28,8 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
             @method('PUT')
 
             {{-- Avatar --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Profile Photo</h2>
+            <div class="panel">
+                <h2 class="panel-title">Profile Photo</h2>
                 <div class="flex items-center gap-6">
                     <div class="w-20 h-20 rounded-full overflow-hidden bg-indigo-100 flex items-center justify-center flex-shrink-0">
                         @if($profile->profile_image)
@@ -43,8 +43,7 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
                         @endif
                     </div>
                     <div>
-                        <input type="file" name="profile_image" accept="image/*"
-                               class="text-sm text-gray-600">
+                        <x-text-input type="file" name="profile_image" accept="image/*"/>
                         <p class="text-xs text-gray-400 mt-1">JPG, PNG or WEBP. Max 2MB.</p>
                         @error('profile_image') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -52,108 +51,97 @@ $rolePrefix = match(auth()->user()->getRoleNames()->first()) {
             </div>
 
             {{-- Account details --}}
-            <div class="bg-white rounded-lg shadow p-6 space-y-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2">Account Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Account Details</h2>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                        <input type="text" name="first_name" value="{{ old('first_name', $user->first_name) }}"
-                               class="input">
+                    <div class="input-container">
+                        <x-input-label class="block text-sm font-medium text-gray-700 mb-1">First Name</x-input-label>
+                        <x-text-input type="text" name="first_name" value="{{ old('first_name', $user->first_name) }}"/>
                         @error('first_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                        <input type="text" name="last_name" value="{{ old('last_name', $user->last_name) }}"
-                               class="input">
+                    <div class="input-container">
+                        <x-input-label class="block text-sm font-medium text-gray-700 mb-1">Last Name</x-input-label>
+                        <x-text-input type="text" name="last_name" value="{{ old('last_name', $user->last_name) }}"/>
                         @error('last_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                    <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                           class="input">
+                    <x-input-label class="block text-sm font-medium text-gray-700 mb-1">Email Address</x-input-label>
+                    <x-text-input type="email" name="email" value="{{ old('email', $user->email) }}"/>
                     @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
 
             {{-- Personal details --}}
-            <div class="bg-white rounded-lg shadow p-6 space-y-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2">Personal Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Personal Details</h2>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Legal Name</label>
-                        <input type="text" name="legal_name" value="{{ old('legal_name', $profile->legal_name) }}"
-                               class="input">
+                    <div class="input-container">
+                        <x-input-label class="block text-sm font-medium text-gray-700 mb-1">Legal Name</x-input-label>
+                        <x-text-input type="text" name="legal_name" value="{{ old('legal_name', $profile->legal_name) }}"/>
                         @error('legal_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Preferred Name</label>
-                        <input type="text" name="preferred_name" value="{{ old('preferred_name', $profile->preferred_name) }}"
-                               class="input">
+                    <div class="input-container">
+                        <x-input-label class="block text-sm font-medium text-gray-700 mb-1">Preferred Name</x-input-label>
+                        <x-text-input type="text" name="preferred_name" value="{{ old('preferred_name', $profile->preferred_name) }}"/>
                         @error('preferred_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                        <input type="text" name="phone" value="{{ old('phone', $profile->phone) }}"
-                               class="input">
+                        <x-input-label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</x-input-label>
+                        <x-text-input type="text" name="phone" value="{{ old('phone', $profile->phone) }}"/>
                         @error('phone') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Home Address</label>
-                        <input type="text" name="address" value="{{ old('address', $profile->address) }}"
-                               class="input">
+                        <x-input-label class="block text-sm font-medium text-gray-700 mb-1">Home Address</x-input-label>
+                        <x-text-input type="text" name="address" value="{{ old('address', $profile->address) }}"/>
                         @error('address') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>
 
             {{-- Emergency contact --}}
-            <div class="bg-white rounded-lg shadow p-6 space-y-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2">Emergency Contact</h2>
+            <div class="panel">
+                <h2 class="panel-title">Emergency Contact</h2>
 
                 <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                        <input type="text" name="emergency_contact_name"
-                               value="{{ old('emergency_contact_name', $profile->emergency_contact_name) }}"
-                               class="input">
+                        <x-input-label class="block text-sm font-medium text-gray-700 mb-1">Name</x-input-label>
+                        <x-text-input type="text" name="emergency_contact_name"
+                               value="{{ old('emergency_contact_name', $profile->emergency_contact_name) }}"/>
                         @error('emergency_contact_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                        <input type="text" name="emergency_contact_phone"
-                               value="{{ old('emergency_contact_phone', $profile->emergency_contact_phone) }}"
-                               class="input">
+                        <x-input-label class="block text-sm font-medium text-gray-700 mb-1">Phone</x-input-label>
+                        <x-text-input type="text" name="emergency_contact_phone"
+                               value="{{ old('emergency_contact_phone', $profile->emergency_contact_phone) }}"/>
                         @error('emergency_contact_phone') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Relationship</label>
-                        <input type="text" name="emergency_contact_relationship"
+                        <x-input-label class="block text-sm font-medium text-gray-700 mb-1">Relationship</x-input-label>
+                        <x-text-input type="text" name="emergency_contact_relationship"
                                value="{{ old('emergency_contact_relationship', $profile->emergency_contact_relationship) }}"
-                               placeholder="e.g. Spouse, Parent"
-                               class="input">
+                               placeholder="e.g. Spouse, Parent"/>
                         @error('emergency_contact_relationship') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>
 
-            <div class="flex justify-end gap-4">
-                <button type="submit"
-                        class="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+            <div class="flex justify-end gap-4 mb-5">
+                <x-primary-button type="submit">
                     Save Changes
-                </button>
+                </x-primary-button>
             </div>
         </form>
 
         {{-- Password change section --}}
-        <div class="bg-white rounded-lg shadow p-6 mt-6">
-            <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Change Password</h2>
+        <div class="panel">
+            <h2 class="panel-title">Change Password</h2>
             <a href="{{ route('password.request') }}"
                class="text-sm text-indigo-600 hover:underline">
                 Reset your password via email

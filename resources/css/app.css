@@ -12,6 +12,10 @@
 }
 
 @layer components {
+  .input-container {
+    @apply mb-4;
+  }
+
   .input {
     @apply w-full rounded-lg border border-gray-300 px-4 py-2;
 
@@ -32,12 +36,16 @@
     }
   }
 
+  .textarea {
+    @apply w-full rounded-lg border border-gray-300 px-4 py-2;
+  }
+
   .radio {
     @apply border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500;
   }
 
   .label {
-    @apply block text-sm font-medium text-gray-950 p-0 m-0 leading-none;
+    @apply block text-sm font-medium text-gray-950 p-0 mb-1 leading-none;
   }
 
   .navigation-item {
