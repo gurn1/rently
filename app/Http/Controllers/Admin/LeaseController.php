@@ -29,8 +29,9 @@ class LeaseController extends Controller
     {
         $properties = Property::with('propertyManager')->get();
         $tenants = User::role('tenant')->get();
+        $propertyOptions = $this->getPropertyOptions();
 
-        return view('dashboard.admin.leases.create', compact('properties', 'tenants'));
+        return view('dashboard.admin.leases.create', compact('properties', 'tenants', 'propertyOptions'));
     }
 
     /**
@@ -74,8 +75,9 @@ class LeaseController extends Controller
     {
         $properties = Property::all();
         $tenants = User::role('tenant')->get();
+        $propertyOptions = $this->getPropertyOptions();
 
-        return view('dashboard.admin.leases.edit', compact('lease', 'properties', 'tenants'));
+        return view('dashboard.admin.leases.edit', compact('lease', 'properties', 'tenants', 'propertyOptions'));
     }
 
     /**
@@ -115,5 +117,19 @@ class LeaseController extends Controller
 
         return redirect()->route('admin.leases.index')
             ->with('success', 'Lease deleted successfully.');
+    }
+
+    /**
+     * Helper to obtain a list of properties
+     */
+    private function getPropertyOptions(): array
+    {
+        return Property::with('propertyManager')->get()->mapWithKeys(function ($property) {
+            $label = $property->title;
+            if ($property->propertyManager) {
+                $label .= " ({$property->propertyManager->first_name} {$property->propertyManager->last_name})";
+            }
+            return [$property->id => $label];
+        })->toArray();
     }
 }
