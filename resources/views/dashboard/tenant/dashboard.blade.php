@@ -29,6 +29,10 @@
         $failedPayments = App\Models\Payment::where('tenant_id', auth()->id())
             ->where('status', 'failed')
             ->count();
+
+        $documents = App\Models\Document::where('tenant_id', auth()->id())->latest()->take(4)->get();
+
+        $workOrders = App\Models\WorkOrder::where('raised_by', auth()->id())->latest()->take(4)->get();
     @endphp
 
     @if($failedPayments > 0)
@@ -46,7 +50,7 @@
 
     {{-- Stats --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="panel">
             <p class="text-sm text-gray-500 mb-1">Lease Status</p>
             @if($activeLease)
                 <p class="text-lg font-bold text-green-600">Active</p>
@@ -55,19 +59,19 @@
                 <p class="text-lg font-bold text-gray-400">No Active Lease</p>
             @endif
         </div>
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="panel">
             <p class="text-sm text-gray-500 mb-1">Unread Messages</p>
             <p class="text-3xl font-bold {{ $unreadMessages > 0 ? 'text-indigo-600' : 'text-gray-400' }}">
                 {{ $unreadMessages }}
             </p>
         </div>
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="panel">
             <p class="text-sm text-gray-500 mb-1">Open Work Orders</p>
             <p class="text-3xl font-bold {{ $openWorkOrders > 0 ? 'text-orange-500' : 'text-gray-400' }}">
                 {{ $openWorkOrders }}
             </p>
         </div>
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="panel">
             <p class="text-sm text-gray-500 mb-1">Documents to Sign</p>
             <p class="text-3xl font-bold {{ $pendingDocuments > 0 ? 'text-red-500' : 'text-gray-400' }}">
                 {{ $pendingDocuments }}
@@ -78,23 +82,23 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         {{-- Active lease --}}
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-center border-b pb-2 mb-4">
-                <h2 class="font-semibold text-gray-700">My Lease</h2>
+        <div class="panel">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="panel-title mb-0">My Lease</h2>
                 <a href="{{ route('tenant.leases.index') }}"
                    class="text-xs text-indigo-600 hover:underline">View all</a>
             </div>
             @if($activeLease)
-                <div class="text-sm space-y-3">
-                    <div class="flex justify-between">
+                <div class="text-sm space-y-2">
+                    <div class="flex justify-between border-b border-gray-100 pb-2">
                         <span class="text-gray-400">Property</span>
                         <span class="font-medium">{{ $activeLease->property->title }}</span>
                     </div>
-                    <div class="flex justify-between">
+                    <div class="flex justify-between border-b border-gray-100 pb-2"">
                         <span class="text-gray-400">Monthly Rent</span>
                         <span class="font-medium">£{{ number_format($activeLease->rent_amount, 0) }}</span>
                     </div>
-                    <div class="flex justify-between">
+                    <div class="flex justify-between border-b border-gray-100 pb-2"">
                         <span class="text-gray-400">Start Date</span>
                         <span class="font-medium">{{ \Carbon\Carbon::parse($activeLease->start_date)->format('d/m/Y') }}</span>
                     </div>
@@ -105,88 +109,100 @@
                         </span>
                     </div>
                 </div>
-                <a href="{{ route('tenant.leases.show', $activeLease) }}"
-                   class="mt-4 block text-center border border-indigo-600 text-indigo-600 py-2 rounded hover:bg-indigo-50 transition text-sm">
+                
+                <x-outline-button href="{{ route('tenant.leases.show', $activeLease) }}" class="w-full text-indigo-600 border-indigo-600 mt-3">
                     View Lease Details
-                </a>
+                </x-outline-button>
             @else
                 <p class="text-gray-400 text-sm">No active lease found.</p>
             @endif
         </div>
 
         {{-- Documents awaiting signature --}}
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-center border-b pb-2 mb-4">
-                <h2 class="font-semibold text-gray-700">Documents</h2>
+        <div class="panel">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="panel-title mb-0">Documents</h2>
                 <a href="{{ route('tenant.documents.index') }}"
                    class="text-xs text-indigo-600 hover:underline">View all</a>
             </div>
-            @forelse(App\Models\Document::where('tenant_id', auth()->id())->latest()->take(4)->get() as $document)
-                <a href="{{ route('tenant.documents.show', $document) }}"
-                   class="flex justify-between items-center py-2 border-b last:border-0 hover:text-indigo-600 transition text-sm">
-                    <span class="font-medium">{{ $document->title }}</span>
-                    @if($document->requires_signature && !$document->is_signed)
-                        <span class="text-xs px-2 py-0.5 rounded bg-yellow-100 text-yellow-700">Sign</span>
-                    @elseif($document->is_signed)
-                        <span class="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700">Signed</span>
-                    @endif
-                </a>
-            @empty
-                <p class="text-gray-400 text-sm">No documents yet.</p>
-            @endforelse
+            <div>
+
+                @if ($documents->isEmpty())
+                    <p class="text-gray-400 text-sm">No documents yet.</p>
+                @else
+
+                    <table class="data-table small">
+                        <thead>
+                            <th>Name</th>
+                            <th class="text-right">Status</th>
+                        </thead>
+                        <tbody>
+                            @foreach($documents as $document)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('tenant.documents.show', $document) }}"> 
+                                            <span class="font-medium">{{ $document->title }}</span>
+                                        </a>
+                                    </td>
+                                    <td class="text-right">
+                                        @if($document->requires_signature && !$document->is_signed)
+                                            <span class="text-xs px-2 py-0.5 rounded bg-yellow-100 text-yellow-700">Sign</span>
+                                        @elseif($document->is_signed)
+                                            <span class="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700">Signed</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                @endif
+            </div>
         </div>
 
         {{-- Recent work orders --}}
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-center border-b pb-2 mb-4">
-                <h2 class="font-semibold text-gray-700">Work Orders</h2>
-                <a href="{{ route('tenant.work-orders.index') }}"
-                   class="text-xs text-indigo-600 hover:underline">View all</a>
+        <div class="panel">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="panel-title mb-0">Work Orders</h2>
+                <a href="{{ route('tenant.work-orders.index') }}" class="text-xs text-indigo-600 hover:underline">View all</a>
             </div>
-            @forelse(App\Models\WorkOrder::where('raised_by', auth()->id())->latest()->take(4)->get() as $workOrder)
-                <a href="{{ route('tenant.work-orders.show', $workOrder) }}"
-                   class="flex justify-between items-center py-2 border-b last:border-0 hover:text-indigo-600 transition text-sm">
-                    <span class="font-medium">{{ $workOrder->title }}</span>
-                    <span class="text-xs px-2 py-0.5 rounded capitalize
-                        {{ $workOrder->status === 'resolved' ? 'bg-green-100 text-green-700' :
-                           ($workOrder->status === 'open' ? 'bg-red-100 text-red-700' :
-                           'bg-yellow-100 text-yellow-700') }}">
-                        {{ str_replace('_', ' ', $workOrder->status) }}
-                    </span>
-                </a>
-            @empty
-                <p class="text-gray-400 text-sm">No work orders yet.</p>
-                <a href="{{ route('tenant.work-orders.create') }}"
-                   class="mt-3 block text-center border border-indigo-600 text-indigo-600 py-2 rounded hover:bg-indigo-50 transition text-sm">
+
+            <div>
+                @if ($workOrders->isEmpty())
+                    <p class="text-gray-400 text-sm">No work orders yet.</p>
+                @else
+                    <table class="data-table small">
+                        <thead>
+                            <th>Issue</th>
+                            <th class="text-right">Status</th>
+                        </thead>
+                        <tbody>
+                            @foreach($workOrders as $workOrder)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('tenant.work-orders.show', $workOrder) }}">
+                                            <span class="font-medium">{{ $workOrder->title }}</span>
+                                        </a>
+                                    </td>
+                                    <td class="text-right">
+                                        <span class="text-xs px-2 py-0.5 rounded capitalize
+                                            {{ $workOrder->status === 'resolved' ? 'bg-green-100 text-green-700' :
+                                            ($workOrder->status === 'open' ? 'bg-red-100 text-red-700' :
+                                            'bg-yellow-100 text-yellow-700') }}">
+                                            {{ str_replace('_', ' ', $workOrder->status) }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+
+                <x-outline-button href="{{ route('tenant.work-orders.create') }}" class="w-full text-indigo-600 border-indigo-600 mt-3">
                     Submit a Request
-                </a>
-            @endforelse
+                </x-outline-button>
+
         </div>
 
-        {{-- Recent messages --}}
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-center border-b pb-2 mb-4">
-                <h2 class="font-semibold text-gray-700">Messages</h2>
-                <a href="{{ route('tenant.messages.index') }}"
-                   class="text-xs text-indigo-600 hover:underline">View all</a>
-            </div>
-            @forelse(App\Models\Conversation::where('tenant_id', auth()->id())->with(['propertyManager', 'messages' => fn($q) => $q->latest()->limit(1)])->latest('last_message_at')->take(3)->get() as $conversation)
-                @php $lastMessage = $conversation->messages->first(); @endphp
-                <a href="{{ route('tenant.messages.show', $conversation) }}"
-                   class="flex justify-between items-start py-2 border-b last:border-0 hover:text-indigo-600 transition text-sm">
-                    <div>
-                        <p class="font-medium">{{ $conversation->propertyManager->first_name }} {{ $conversation->propertyManager->last_name }}</p>
-                        @if($lastMessage)
-                            <p class="text-gray-400 text-xs truncate max-w-xs">{{ $lastMessage->body }}</p>
-                        @endif
-                    </div>
-                    @if($lastMessage && !$lastMessage->read_at && $lastMessage->sender_id !== auth()->id())
-                        <span class="bg-indigo-600 text-white text-xs rounded-full px-2 py-0.5 flex-shrink-0">New</span>
-                    @endif
-                </a>
-            @empty
-                <p class="text-gray-400 text-sm">No messages yet.</p>
-            @endforelse
-        </div>
     </div>
 @endsection
