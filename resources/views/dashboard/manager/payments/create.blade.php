@@ -3,7 +3,7 @@
 @section('title', 'Request Payment')
 
 @section('content')
-    <div class="max-w-2xl mx-auto">
+    <div>
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-2xl font-bold text-gray-900">Request Payment</h1>
             <a href="{{ route('manager.payments.index') }}"
@@ -15,47 +15,38 @@
         <form method="POST" action="{{ route('manager.payments.store') }}" class="space-y-6">
             @csrf
 
-            <div class="bg-white rounded-lg shadow p-6 space-y-6">
+            <div class="panel">
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Lease</label>
-                    <select name="lease_id"
-                            class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="">Select a lease</option>
-                        @foreach($leases as $lease)
-                            <option value="{{ $lease->id }}" {{ old('lease_id') == $lease->id ? 'selected' : '' }}>
-                                {{ $lease->property->title }} — {{ $lease->tenant->first_name }} {{ $lease->tenant->last_name }}
-                            </option>
-                        @endforeach
-                    </select>
+                <div class="input-container">
+                    <x-input-label>Lease</x-input-label>
+                    <x-select
+                        name="lease_id"
+                        placeholder="Select a lease"
+                        :selected="old('lease_id')"
+                        :options="$leases->mapWithKeys(fn($l) => [$l->id => $l->property->title . ' — ' . $l->tenant->first_name . ' ' . $l->tenant->last_name])->toArray()"
+                    />
                     @error('lease_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Amount (£)</label>
-                    <input type="number" name="amount" value="{{ old('amount') }}" step="0.01"
-                           class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <div class="input-container">
+                    <x-input-label>Amount (£)</x-input-label>
+                    <x-text-input type="number" name="amount" value="{{ old('amount') }}" step="0.01"/>
                     @error('amount') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
-                    <input type="date" name="due_date" value="{{ old('due_date') }}"
-                           class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <div class="input-container">
+                    <x-input-label>Due Date</x-input-label>
+                    <x-text-input type="date" name="due_date" value="{{ old('due_date') }}"/>
                     @error('due_date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
-                    <select name="payment_method"
-                            class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="stripe" {{ old('payment_method') === 'stripe' ? 'selected' : '' }}>
-                            Stripe (Online Payment)
-                        </option>
-                        <option value="manual" {{ old('payment_method') === 'manual' ? 'selected' : '' }}>
-                            Manual (Bank Transfer / Cash)
-                        </option>
-                    </select>
+                <div class="input-container">
+                    <x-input-label>Payment Method</x-input-label>
+                    <x-select
+                        name="payment_method"
+                        :selected="old('payment_method')"
+                        :options="['stripe' => 'Stripe (Online Payment)', 'manual' => 'Manual (Bank Transfer / Cash)']"
+                    />
                     <p class="text-xs text-gray-400 mt-1">
                         This determines how the tenant will pay their monthly rent.
                     </p>
@@ -63,25 +54,22 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                    <x-input-label>
                         Notes
                         <span class="text-gray-400 font-normal">(optional)</span>
-                    </label>
-                    <textarea name="notes" rows="3"
-                              class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('notes') }}</textarea>
+                    </x-input-label>
+                    <x-textarea name="notes" rows="3">{{ old('notes') }}</x-textarea>
                     @error('notes') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
 
             <div class="flex justify-end gap-4">
-                <a href="{{ route('manager.payments.index') }}"
-                   class="px-6 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 transition">
+                <x-outline-button href="{{ route('manager.payments.index') }}">
                     Cancel
-                </a>
-                <button type="submit"
-                        class="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                </x-outline-button>
+                <x-primary-button type="submit">
                     Request Payment
-                </button>
+                </x-primary-button>
             </div>
         </form>
     </div>

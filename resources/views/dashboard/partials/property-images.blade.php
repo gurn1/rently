@@ -1,7 +1,7 @@
 {{-- Existing images --}}
 @if(isset($property) && $property->images->count() > 0)
-    <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Current Images</h2>
+    <div class="panel">
+        <h2 class="panel-title">Current Images</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             @foreach($property->images->sortBy('sort_order') as $image)
                 <div class="relative group">
@@ -24,10 +24,9 @@
                             <form method="POST"
                                   action="{{ route(auth()->user()->routePrefix() . '.properties.images.featured', [$property, $image]) }}">
                                 @csrf
-                                <button type="submit"
-                                        class="bg-indigo-600 text-white text-xs px-2 py-1 rounded hover:bg-indigo-700 transition">
+                                <x-primary-button type="button">
                                     Set Featured
-                                </button>
+                                </x-primary-button>
                             </form>
                         @endif
 
@@ -36,10 +35,9 @@
                               onsubmit="return confirm('Delete this image?')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit"
-                                    class="bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600 transition">
+                            <x-danger-button type="button">
                                 Delete
-                            </button>
+                            </x-danger-button>
                         </form>
                     </div>
                 </div>
@@ -49,8 +47,8 @@
 @endif
 
 {{-- Upload new images --}}
-<div class="bg-white rounded-lg shadow p-6">
-    <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">
+<div class="panel">
+    <h2 class="panel-title">
         {{ isset($property) && $property->images->count() > 0 ? 'Add More Images' : 'Upload Images' }}
     </h2>
 
@@ -61,27 +59,26 @@
               enctype="multipart/form-data">
             @csrf
             <div class="space-y-3">
-                <input type="file"
+                <x-text-input type="file"
                        name="images[]"
                        multiple
                        accept="image/jpg,image/jpeg,image/png,image/webp"
-                       class="w-full text-sm text-gray-600 border border-gray-300 rounded p-2">
+                />
                 <p class="text-xs text-gray-400">JPG, PNG or WEBP. Max 5MB per image. Up to 10 images.</p>
                 @error('images.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                <button type="submit"
-                        class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition text-sm">
+                <x-primary-button type="submit">
                     Upload Images
-                </button>
+                </x-primary-button>
             </div>
         </form>
     @else
         {{-- On create page — part of main form --}}
         <div class="space-y-3">
-            <input type="file"
+            <x-text-input type="file"
                    name="images[]"
                    multiple
                    accept="image/jpg,image/jpeg,image/png,image/webp"
-                   class="w-full text-sm text-gray-600 border border-gray-300 rounded p-2">
+             />
             <p class="text-xs text-gray-400">JPG, PNG or WEBP. Max 5MB per image. Up to 10 images. The first image will be set as the featured image.</p>
             @error('images.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>

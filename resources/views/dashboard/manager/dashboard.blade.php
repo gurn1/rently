@@ -14,7 +14,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="panel flex gap-5">
             <div class="aspect-square w-[20%] bg-properties rounded-full flex items-center justify-center">
-                <a href="{{ route('manager.properties.index') }}"><span class="material-symbols-outlined font-light !text-5xl mt-[-5px]  text-white">other_houses</span></a>
+                <a href="{{ route('manager.properties.index') }}"><span class="material-symbols-outlined font-light !text-5xl text-white">other_houses</span></a>
             </div>
             <div class="flex flex-col justify-center">
                 <a href="{{ route('manager.properties.index') }}">
@@ -27,7 +27,7 @@
         </div>
         <div class="panel flex gap-5">
             <div class="aspect-square w-[20%] bg-users rounded-full flex items-center justify-center">
-                <a href="{{ route('manager.users.index') }}"><span class="material-symbols-outlined font-light !text-5xl mt-[-5px]  text-white">groups</span></a>
+                <a href="{{ route('manager.users.index') }}"><span class="material-symbols-outlined font-light !text-5xl text-white">groups</span></a>
             </div>
             <div class="flex flex-col justify-center">
                 <a href="{{ route('manager.users.index') }}">
@@ -40,7 +40,7 @@
         </div>
         <div class="panel flex gap-5">
             <div class="aspect-square w-[20%] bg-leases rounded-full flex items-center justify-center">
-                <a href="{{ route('manager.leases.index') }}"><span class="material-symbols-outlined font-light !text-5xl mt-[-5px]  text-white">contract</span></a>
+                <a href="{{ route('manager.leases.index') }}"><span class="material-symbols-outlined font-light !text-5xl text-white">contract</span></a>
             </div>
             <div class="flex flex-col justify-center">
                 <a href="{{ route('manager.leases.index') }}">

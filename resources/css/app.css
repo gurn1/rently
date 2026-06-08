@@ -57,7 +57,7 @@
   }
 
   .panel {
-    @apply bg-white rounded-lg shadow p-6;
+    @apply bg-white rounded-lg shadow p-6 mb-6;
   }
 
   .panel-title {

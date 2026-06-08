@@ -106,6 +106,8 @@
                 </div>
             </div>
 
+            @include('dashboard.partials.property-images')
+
             <div class="panel">
                 <h2 class="panel-title">Amenities</h2>
                 <div class="max-w-[50%]">

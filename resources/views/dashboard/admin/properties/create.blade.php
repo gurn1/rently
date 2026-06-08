@@ -113,6 +113,9 @@
                 </div>
             </div>
 
+            {{-- Images --}}
+            @include('dashboard.partials.property-images')
+
             {{-- Amenities --}}
             <div class="panel">
                 <h2 class="panel-title">Amenities</h2>
