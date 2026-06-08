@@ -37,7 +37,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Rent (£)</label>
                     <input type="number" name="rent_amount" value="{{ old('rent_amount', $lease->rent_amount) }}" step="0.01"
                            class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    @error('rent_amount') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('rent_amount') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Dates --}}
@@ -46,13 +46,13 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
                         <input type="date" name="start_date" value="{{ old('start_date', $lease->start_date) }}"
                                class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        @error('start_date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('start_date') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
                         <input type="date" name="end_date" value="{{ old('end_date', $lease->end_date) }}"
                                class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        @error('end_date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('end_date') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@
                             </option>
                         @endforeach
                     </select>
-                    @error('status') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('status') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Termination notes --}}
@@ -78,7 +78,7 @@
                     </label>
                     <textarea name="termination_notes" rows="3"
                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('termination_notes', $lease->termination_notes) }}</textarea>
-                    @error('termination_notes') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('termination_notes') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
             </div>
 

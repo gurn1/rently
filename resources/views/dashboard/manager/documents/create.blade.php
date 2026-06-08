@@ -23,7 +23,7 @@
                 <div class="input-container">
                     <x-input-label class="block text-sm font-medium text-gray-700 mb-1">Title</x-input-label>
                     <x-text-input type="text" name="title" value="{{ old('title') }}"/>
-                    @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('title') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
@@ -34,7 +34,7 @@
                         :selected="old('tenant_id')"
                         :options="$tenants->mapWithKeys(fn($t) => [$t->id => $t->first_name . ' ' . $t->last_name])->toArray()"
                     />
-                    @error('tenant_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('tenant_id') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
@@ -45,7 +45,7 @@
                         :selected="old('document_type')"
                         :options="$documentTypes"
                     />
-                    @error('document_type') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('document_type') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
@@ -58,7 +58,7 @@
                         :selected="old('property_id')"
                         :options="$properties->pluck('title', 'id')->toArray()"
                     />
-                    @error('property_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('property_id') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
@@ -71,14 +71,14 @@
                         :selected="old('lease_id')"
                         :options="$leases->mapWithKeys(fn($l) => [$l->id => $l->property->title . ' — ' . $l->tenant->first_name . ' ' . $l->tenant->last_name])->toArray()"
                     />
-                    @error('lease_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('lease_id') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
                     <x-input-label class="block text-sm font-medium text-gray-700 mb-1">File</x-input-label>
                     <x-text-input type="file" name="file" accept=".pdf,.doc,.docx"/>
                     <p class="text-xs text-gray-400 mt-1">PDF, DOC or DOCX. Max 10MB.</p>
-                    @error('file') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('file') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="flex items-center gap-3">

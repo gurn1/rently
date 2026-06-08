@@ -3,7 +3,7 @@
 @section('title', 'My Leases')
 
 @section('content')
-    <div class="mb-8">
+    <div class="flex justify-between items-center mb-8">
         <h1 class="text-2xl font-bold text-gray-900">My Leases</h1>
         <p class="text-gray-500 mt-1">Your current and past tenancy agreements.</p>
     </div>
@@ -16,7 +16,7 @@
         <div class="space-y-4">
             @foreach($leases as $lease)
                 <a href="{{ route('tenant.leases.show', $lease) }}"
-                   class="block bg-white rounded-lg shadow p-6 hover:shadow-md transition">
+                   class="block panel">
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="font-semibold text-gray-900 text-lg">{{ $lease->property->title }}</h2>

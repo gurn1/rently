@@ -65,7 +65,7 @@
                        accept="image/jpg,image/jpeg,image/png,image/webp"
                 />
                 <p class="text-xs text-gray-400">JPG, PNG or WEBP. Max 5MB per image. Up to 10 images.</p>
-                @error('images.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                @error('images.*') <p class="error-field-message">{{ $message }}</p> @enderror
                 <x-primary-button type="submit">
                     Upload Images
                 </x-primary-button>
@@ -80,7 +80,7 @@
                    accept="image/jpg,image/jpeg,image/png,image/webp"
              />
             <p class="text-xs text-gray-400">JPG, PNG or WEBP. Max 5MB per image. Up to 10 images. The first image will be set as the featured image.</p>
-            @error('images.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            @error('images.*') <p class="error-field-message">{{ $message }}</p> @enderror
         </div>
     @endif
 </div>

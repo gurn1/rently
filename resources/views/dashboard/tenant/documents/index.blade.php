@@ -9,14 +9,13 @@
     </div>
 
     @if($documents->isEmpty())
-        <div class="bg-white rounded-lg shadow p-12 text-center text-gray-400">
+        <div class="panel">
             <p class="text-xl">No documents yet.</p>
         </div>
     @else
         <div class="space-y-4">
             @foreach($documents as $document)
-                <a href="{{ route('tenant.documents.show', $document) }}"
-                   class="block bg-white rounded-lg shadow p-6 hover:shadow-md transition">
+                <a href="{{ route('tenant.documents.show', $document) }}" class="block panel">
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="font-semibold text-gray-900">{{ $document->title }}</h2>

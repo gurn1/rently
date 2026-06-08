@@ -32,7 +32,7 @@
     </div>
 
     @if($payments->isEmpty())
-        <div class="bg-white rounded-lg shadow p-12 text-center text-gray-400">
+        <div class="panel">
             <p class="text-xl">No payments found.</p>
         </div>
     @else

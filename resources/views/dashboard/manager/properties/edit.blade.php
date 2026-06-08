@@ -23,37 +23,37 @@
                 <div class="input-container">
                     <x-input-label>Title</x-input-label>
                     <x-text-input type="text" name="title" value="{{ old('title', $property->title) }}"/>
-                    @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('title') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
                     <x-input-label>Key Features</x-input-label>
                     <x-textarea name="key_features" rows="3">{{ old('key_features', $property->key_features) }}</x-textarea>
-                    @error('key_features') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('key_features') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
                     <x-input-label>Description</x-input-label>
                     <x-textarea name="description" rows="5" class="">{{ old('description', $property->description) }}</x-textarea>
-                    @error('description') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('description') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
                     <x-input-label>Address</x-input-label>
                     <x-text-input type="text" name="address" value="{{ old('address', $property->address) }}"/>
-                    @error('address') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('address') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <x-input-label>Latitude</x-input-label>
                         <x-text-input type="text" name="latitude" value="{{ old('latitude', $property->latitude) }}"/>
-                        @error('latitude') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('latitude') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <x-input-label>Longitude</x-input-label>
                         <x-text-input type="text" name="longitude" value="{{ old('longitude', $property->longitude) }}"/>
-                        @error('longitude') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('longitude') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
                 <div class="input-container">
                     <x-input-label>Monthly Rent (£)</x-input-label>
                     <x-text-input type="number" name="price" value="{{ old('price', $property->price) }}" step="0.01"/>
-                    @error('price') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('price') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -75,7 +75,7 @@
                             :selected="old('property_type')"
                             :options="['house' => 'House', 'apartment' => 'Apartment', 'studio' => 'Studio', 'commercial' => 'Commercial']"
                         />
-                        @error('property_type') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('property_type') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                     <div class="input-container">
                         <x-input-label>Availability</x-input-label>
@@ -84,7 +84,7 @@
                             :selected="old('availability_status')"
                             :options="['available' => 'Available', 'occupied' => 'Occupied', 'under_maintenance' => 'Under Maintenance']"
                         />
-                        @error('availability_status') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('availability_status') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -92,17 +92,17 @@
                     <div>
                         <x-input-label>Bedrooms</x-input-label>
                         <x-text-input type="number" name="bedrooms" value="{{ old('bedrooms', $property->bedrooms) }}" min="0"/>
-                        @error('bedrooms') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('bedrooms') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <x-input-label>Bathrooms</x-input-label>
                         <x-text-input type="number" name="bathrooms" value="{{ old('bathrooms', $property->bathrooms) }}" min="0"/>
-                        @error('bathrooms') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('bathrooms') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <x-input-label>Size (sq ft)</x-input-label>
                         <x-text-input type="number" name="size" value="{{ old('size', $property->size) }}" min="0"/>
-                        @error('size') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('size') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>

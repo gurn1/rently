@@ -48,6 +48,10 @@
     @apply block text-sm font-medium text-gray-950 p-0 mb-1 leading-none;
   }
 
+  .error-field-message {
+    @apply inline-block bg-red-200 text-red-500 text-xs mt-1 px-2 py-1 rounded-md;
+  }
+
   .navigation-item {
     @apply flex items-center gap-x-4 my-2.5 text-light-text hover:text-indigo-600 transition;
   }
@@ -57,7 +61,7 @@
   }
 
   .panel {
-    @apply bg-white rounded-lg shadow p-6 mb-6;
+    @apply bg-white rounded-lg shadow p-6 mb-6 hover:shadow-md;
   }
 
   .panel-title {

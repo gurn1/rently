@@ -72,7 +72,7 @@
                 </button>
             </div>
             @error('body')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                <p class="error-field-message">{{ $message }}</p>
             @enderror
         </form>
     </div>

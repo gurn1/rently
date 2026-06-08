@@ -25,19 +25,19 @@
                         :selected="old('property_id')"
                         :options="$properties->pluck('title', 'id')->toArray()"
                     />
-                    @error('property_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('property_id') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
                     <x-input-label>Title</x-input-label>
                     <x-text-input type="text" name="title" value="{{ old('title') }}"/>
-                    @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('title') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
                     <x-input-label>Description</x-input-label>
                     <x-textarea name="description" rows="4">{{ old('description') }}</x-textarea>
-                    @error('description') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('description') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
@@ -47,7 +47,7 @@
                         :selected="old('priority')"
                         :options="collect(['low', 'medium', 'high', 'urgent'])->mapWithKeys(fn($p) => [$p => ucfirst($p)])->toArray()"
                     />
-                    @error('priority') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('priority') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
             </div>
 

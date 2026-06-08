@@ -25,7 +25,7 @@
                         :selected="old('property_id', $lease->property_id)"
                         :options="$propertyOptions"
                     />
-                    @error('property_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('property_id') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
@@ -36,25 +36,25 @@
                         :selected="old('tenant_id', $lease->tenant_id)"
                         :options="$tenants->mapWithKeys(fn($t) => [$t->id => $t->first_name . ' ' . $t->last_name])->toArray()"
                     />
-                    @error('tenant_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('tenant_id') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
                     <x-input-label>Monthly Rent (£)</x-input-label>
                     <x-text-input type="number" name="rent_amount" value="{{ old('rent_amount', $lease->rent_amount) }}" step="0.01"/>
-                    @error('rent_amount') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('rent_amount') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 input-container">
                     <div>
                         <x-input-label>Start Date</x-input-label>
                         <x-text-input type="date" name="start_date" value="{{ old('start_date', $lease->start_date) }}"/>
-                        @error('start_date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('start_date') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <x-input-label>End Date</x-input-label>
                         <x-text-input type="date" name="end_date" value="{{ old('end_date', $lease->end_date) }}"/>
-                        @error('end_date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('end_date') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@
                         :selected="old('status')"
                         :options="collect(['pending', 'active', 'ended', 'terminated'])->mapWithKeys(fn($s) => [$s => ucfirst($s)])->toArray()"
                     />
-                    @error('status') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('status') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
@@ -74,7 +74,7 @@
                         <span class="text-gray-400 font-normal">(only required if terminating)</span>
                     </x-input-label>
                     <x-textarea name="termination_notes" rows="3">{{ old('termination_notes', $lease->termination_notes) }}</x-textarea>
-                    @error('termination_notes') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('termination_notes') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
             </div>
 

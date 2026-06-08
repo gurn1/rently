@@ -21,19 +21,19 @@
                     <div class="input-container">
                         <x-input-label>First Name</x-input-label>
                         <x-text-input type="text" name="first_name" value="{{ old('first_name') }}"/>
-                        @error('first_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('first_name') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                     <div class="input-container">
                         <x-input-label>Last Name</x-input-label>
                         <x-text-input type="text" name="last_name" value="{{ old('last_name') }}"/>
-                        @error('last_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('last_name') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
                 <div class="input-container">
                     <x-input-label>Email Address</x-input-label>
                     <x-text-input type="email" name="email" value="{{ old('email') }}"/>
-                    @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('email') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
@@ -44,14 +44,14 @@
                         :selected="old('role')"
                         :options="$roles->pluck('name')->mapWithKeys(fn($name) => [$name => ucwords(str_replace('_', ' ', $name))])->toArray()"
                     />
-                    @error('role') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('role') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <x-input-label>Password</x-input-label>
                         <x-text-input type="password" name="password"/>
-                        @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('password') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <x-input-label>Confirm Password</x-input-label>

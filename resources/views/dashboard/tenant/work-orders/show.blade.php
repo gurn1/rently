@@ -96,7 +96,7 @@
                                 Add
                             </button>
                         </div>
-                        @error('comment') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('comment') <p class="error-field-message">{{ $message }}</p> @enderror
                     </form>
                 @endif
             </div>

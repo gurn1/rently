@@ -15,37 +15,56 @@
     </div>
 
     @if($workOrders->isEmpty())
-        <div class="bg-white rounded-lg shadow p-12 text-center text-gray-400">
+        <div class="panel">
             <p class="text-xl">No work orders yet.</p>
         </div>
     @else
         <div class="space-y-4">
+            <div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Property</th>
+                        <th>Date</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
             @foreach($workOrders as $workOrder)
-                <a href="{{ route('tenant.work-orders.show', $workOrder) }}"
-                   class="block bg-white rounded-lg shadow p-6 hover:shadow-md transition">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="font-semibold text-gray-900">{{ $workOrder->title }}</h2>
-                            <p class="text-gray-500 text-sm mt-1">{{ $workOrder->property->title }}</p>
-                            <p class="text-gray-400 text-xs mt-1">{{ $workOrder->created_at->diffForHumans() }}</p>
-                        </div>
-                        <div class="flex flex-col items-end gap-2">
-                            <span class="text-xs px-2 py-1 rounded capitalize
-                                {{ $workOrder->priority === 'urgent' ? 'bg-red-100 text-red-700' :
-                                   ($workOrder->priority === 'high' ? 'bg-orange-100 text-orange-700' :
-                                   ($workOrder->priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                                   'bg-gray-100 text-gray-600')) }}">
-                                {{ $workOrder->priority }}
-                            </span>
-                            <span class="text-xs px-2 py-1 rounded capitalize
-                                {{ $workOrder->status === 'resolved' ? 'bg-green-100 text-green-700' :
-                                   ($workOrder->status === 'open' ? 'bg-red-100 text-red-700' :
-                                   'bg-yellow-100 text-yellow-700') }}">
-                                {{ str_replace('_', ' ', $workOrder->status) }}
-                            </span>
-                        </div>
-                    </div>
-                </a>
+                <tr>
+                    <td class="font-semibold text-gray-900">
+                        <a href="{{ route('tenant.work-orders.show', $workOrder) }}">
+                            {{ $workOrder->title }}
+                        </a>
+                    </td>
+                    <td>{{ $workOrder->property->title }}</td>
+                    <td>{{ $workOrder->created_at->diffForHumans() }}</td>
+                    <td>
+                        <span class="text-xs px-2 py-1 rounded capitalize
+                            {{ $workOrder->priority === 'urgent' ? 'bg-red-100 text-red-700' :
+                                ($workOrder->priority === 'high' ? 'bg-orange-100 text-orange-700' :
+                                ($workOrder->priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                                'bg-gray-100 text-gray-600')) }}">
+                            {{ $workOrder->priority }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="text-xs px-2 py-1 rounded capitalize
+                            {{ $workOrder->status === 'resolved' ? 'bg-green-100 text-green-700' :
+                                ($workOrder->status === 'open' ? 'bg-red-100 text-red-700' :
+                                'bg-yellow-100 text-yellow-700') }}">
+                            {{ str_replace('_', ' ', $workOrder->status) }}
+                        </span>
+                    </td>
+                    <td>
+                        <x-outline-button href="{{ route('tenant.work-orders.show', $workOrder) }}"
+                            class="text-indigo-600 border-indigo-600"
+                        >View</x-outline-button>
+                    </td>
+                </tr>
             @endforeach
         </div>
 
