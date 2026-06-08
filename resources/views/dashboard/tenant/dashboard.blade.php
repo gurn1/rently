@@ -10,31 +10,6 @@
         <p class="text-gray-500 mt-1">Here's an overview of your tenancy.</p>
     </div>
 
-    @php
-        $activeLease = auth()->user()->leases()->where('status', 'active')->with('property')->first();
-        $unreadMessages = App\Models\Conversation::where('tenant_id', auth()->id())
-            ->with(['messages' => fn($q) => $q->whereNull('read_at')->where('sender_id', '!=', auth()->id())])
-            ->get()
-            ->sum(fn($c) => $c->messages->count());
-        $openWorkOrders = App\Models\WorkOrder::where('raised_by', auth()->id())
-            ->whereIn('status', ['open', 'in_progress', 'pending_review'])
-            ->count();
-        $pendingDocuments = App\Models\Document::where('tenant_id', auth()->id())
-            ->where('requires_signature', true)
-            ->where('is_signed', false)
-            ->count();
-    @endphp
-
-    @php
-        $failedPayments = App\Models\Payment::where('tenant_id', auth()->id())
-            ->where('status', 'failed')
-            ->count();
-
-        $documents = App\Models\Document::where('tenant_id', auth()->id())->latest()->take(4)->get();
-
-        $workOrders = App\Models\WorkOrder::where('raised_by', auth()->id())->latest()->take(4)->get();
-    @endphp
-
     @if($failedPayments > 0)
         <div class="bg-red-50 border border-red-300 text-red-800 px-4 py-4 rounded-lg mb-8 flex justify-between items-center">
             <div>
@@ -109,7 +84,7 @@
                         </span>
                     </div>
                 </div>
-                
+
                 <x-outline-button href="{{ route('tenant.leases.show', $activeLease) }}" class="w-full text-indigo-600 border-indigo-600 mt-3">
                     View Lease Details
                 </x-outline-button>

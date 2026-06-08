@@ -5,6 +5,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\Manager\DashboardController as ManagerDashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Tenant\DashboardController as TenantDashboardController;
 use App\Http\Controllers\Manager\PropertyController as ManagerPropertyController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 use App\Http\Controllers\Manager\ConversationController as ManagerConversationController;
@@ -76,6 +77,8 @@ Route::middleware(['auth', 'role:tenant'])
         Route::get('/dashboard', function () {
             return view('dashboard.tenant.dashboard');
         })->name('dashboard');
+
+        Route::get('/dashboard', [TenantDashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('messages', TenantConversationController::class)
             ->only(['index', 'show'])
