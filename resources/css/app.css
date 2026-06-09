@@ -22,6 +22,10 @@
     &:focus {
       @apply border-highlight outline-none ring-2 ring-highlight/20;
     }
+
+    &:disabled {
+      @apply bg-gray-100 cursor-not-allowed;
+    }
   }
 
   .input:focus {
@@ -61,7 +65,7 @@
   }
 
   .panel {
-    @apply bg-white rounded-lg shadow p-6 mb-6 hover:shadow-md;
+    @apply bg-white rounded-lg shadow p-6 hover:shadow-md;
   }
 
   .panel-title {

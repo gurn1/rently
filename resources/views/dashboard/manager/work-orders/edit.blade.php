@@ -23,7 +23,7 @@
                     <x-select
                         name="property_id"
                         placeholder="Select a property"
-                        :selected="old('property_id')"
+                        :selected="old('property_id', $workOrder->property_id)"
                         :options="$properties->pluck('title', 'id')->toArray()"
                     />
                     @error('property_id') <p class="error-field-message">{{ $message }}</p> @enderror
@@ -31,24 +31,34 @@
 
                 <div class="input-container">
                     <x-input-label>Title</x-input-label>
-                    <x-text-input type="text" name="title" value="{{ old('title') }}"/>
+                    <x-text-input type="text" name="title" value="{{ old('title', $workOrder->title) }}"/>
                     @error('title') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="input-container">
                     <x-input-label>Description</x-input-label>
-                    <x-textarea name="description" rows="4">{{ old('description') }}</x-textarea>
+                    <x-textarea name="description" rows="4">{{ old('description', $workOrder->description) }}</x-textarea>
                     @error('description') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
-                <div>
+                <div class="input-container">
                     <x-input-label>Priority</x-input-label>
                     <x-select
                         name="priority"
-                        :selected="old('priority')"
+                        :selected="old('priority', $workOrder->priority)"
                         :options="collect(['low', 'medium', 'high', 'urgent'])->mapWithKeys(fn($p) => [$p => ucfirst($p)])->toArray()"
                     />
                     @error('priority') <p class="error-field-message">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <x-input-label>Status</x-input-label>
+                    <x-select
+                        name="status"
+                        :selected="old('status', $workOrder->status)"
+                        :options="collect(['open', 'in_progress', 'pending_review', 'resolved', 'closed'])->mapWithKeys(fn($s) => [$s => ucfirst(str_replace('_', ' ', $s))])->toArray()"
+                    />
+                    @error('status') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
             </div>
 

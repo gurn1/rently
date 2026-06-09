@@ -3,7 +3,7 @@
 @section('title', 'Edit Lease')
 
 @section('content')
-    <div class="max-w-2xl mx-auto">
+    <div>
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-2xl font-bold text-gray-900">Edit Lease</h1>
             <a href="{{ route('manager.leases.show', $lease) }}"
@@ -16,81 +16,69 @@
             @csrf
             @method('PUT')
 
-            <div class="bg-white rounded-lg shadow p-6 space-y-6">
+            <div class="panel">
 
                 {{-- Property (read only) --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Property</label>
-                    <input type="text" value="{{ $lease->property->title }}" disabled
-                           class="w-full border-gray-300 rounded shadow-sm bg-gray-50 text-gray-500">
+                <div class="input-container">
+                    <x-input-label>Property</x-input-label>
+                    <x-text-input type="text" value="{{ $lease->property->title }}" disabled/>
                 </div>
 
                 {{-- Tenant (read only) --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tenant</label>
-                    <input type="text" value="{{ $lease->tenant->first_name }} {{ $lease->tenant->last_name }}" disabled
-                           class="w-full border-gray-300 rounded shadow-sm bg-gray-50 text-gray-500">
+                <div class="input-container">
+                    <x-input-label>Tenant</x-input-label>
+                    <x-text-input type="text" value="{{ $lease->tenant->first_name }} {{ $lease->tenant->last_name }}" disabled/>
                 </div>
 
                 {{-- Rent --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Rent (£)</label>
-                    <input type="number" name="rent_amount" value="{{ old('rent_amount', $lease->rent_amount) }}" step="0.01"
-                           class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <div class="input-container">
+                    <x-input-label>Monthly Rent (£)</x-input-label>
+                    <x-text-input type="number" name="rent_amount" value="{{ old('rent_amount', $lease->rent_amount) }}" step="0.01"/>
                     @error('rent_amount') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Dates --}}
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-4 input-container">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                        <input type="date" name="start_date" value="{{ old('start_date', $lease->start_date) }}"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <x-input-label>Start Date</x-input-label>
+                        <x-text-input type="date" name="start_date" value="{{ old('start_date', $lease->start_date) }}"/>
                         @error('start_date') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
-                        <input type="date" name="end_date" value="{{ old('end_date', $lease->end_date) }}"
-                               class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <x-input-label>End Date</x-input-label>
+                        <x-text-input type="date" name="end_date" value="{{ old('end_date', $lease->end_date) }}"/>
                         @error('end_date') <p class="error-field-message">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
                 {{-- Status --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                    <select name="status"
-                            class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        @foreach(['pending', 'active', 'ended', 'terminated'] as $status)
-                            <option value="{{ $status }}" {{ old('status', $lease->status) === $status ? 'selected' : '' }}>
-                                {{ ucfirst($status) }}
-                            </option>
-                        @endforeach
-                    </select>
+                <div class="input-container">
+                    <x-input-label>Status</x-input-label>
+                    <x-select
+                        name="status"
+                        :selected="old('status')"
+                        :options="collect(['pending', 'active', 'ended', 'terminated'])->mapWithKeys(fn($s) => [$s => ucfirst($s)])->toArray()"
+                    />
                     @error('status') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Termination notes --}}
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Termination Notes
-                        <span class="text-gray-400 font-normal">(only required if terminating)</span>
-                    </label>
-                    <textarea name="termination_notes" rows="3"
-                              class="w-full border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('termination_notes', $lease->termination_notes) }}</textarea>
+                    <x-input-label>Termination Notes <span class="text-gray-400 font-normal">(only required if terminating)</span></x-input-label>
+                    <x-textarea name="termination_notes" rows="3">
+                        {{ old('termination_notes', $lease->termination_notes) }}
+                    </x-textarea>
                     @error('termination_notes') <p class="error-field-message">{{ $message }}</p> @enderror
                 </div>
             </div>
 
             <div class="flex justify-end gap-4">
-                <a href="{{ route('manager.leases.show', $lease) }}"
-                   class="px-6 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 transition">
+                <x-outline-button href="{{ route('manager.leases.show', $lease) }}">
                     Cancel
-                </a>
-                <button type="submit"
-                        class="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                </x-outline-button>
+                <x-primary-button>
                     Save Changes
-                </button>
+                </x-primary-button>
             </div>
         </form>
     </div>

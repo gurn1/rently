@@ -28,9 +28,12 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
+        $recentProperties = auth()->user()->properties->take(3);
+
         return view('dashboard.manager.dashboard', compact(
             'leases',
-            'workOrders'
+            'workOrders',
+            'recentProperties'
         ));
     }
 }

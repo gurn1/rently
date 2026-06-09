@@ -69,11 +69,11 @@
                         <span class="text-gray-400">Property</span>
                         <span class="font-medium">{{ $activeLease->property->title }}</span>
                     </div>
-                    <div class="flex justify-between border-b border-gray-100 pb-2"">
+                    <div class="flex justify-between border-b border-gray-100 pb-2">
                         <span class="text-gray-400">Monthly Rent</span>
                         <span class="font-medium">£{{ number_format($activeLease->rent_amount, 0) }}</span>
                     </div>
-                    <div class="flex justify-between border-b border-gray-100 pb-2"">
+                    <div class="flex justify-between border-b border-gray-100 pb-2">
                         <span class="text-gray-400">Start Date</span>
                         <span class="font-medium">{{ \Carbon\Carbon::parse($activeLease->start_date)->format('d/m/Y') }}</span>
                     </div>

@@ -1,4 +1,4 @@
-    <div class="max-w-7xl mx-auto mt-4 mb-4">
+    <div class="mx-auto mt-4 mb-4">
         @if(session('success'))
             <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded flex justify-between items-center">
                 <span>{{ session('success') }}</span>

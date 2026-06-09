@@ -23,8 +23,8 @@
         <div class="lg:col-span-2 space-y-6">
 
             {{-- Details --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Details</h2>
                 <div class="grid grid-cols-2 gap-4 text-sm mb-4">
                     <div>
                         <p class="text-gray-400">Priority</p>
@@ -62,15 +62,15 @@
                         </div>
                     @endif
                 </div>
-                <div class="pt-4 border-t">
+                <div class="pt-4 border-t border-gray-100">
                     <p class="text-gray-400 text-sm mb-2">Description</p>
                     <p class="text-sm text-gray-700">{!! nl2br(e($workOrder->description)) !!}</p>
                 </div>
             </div>
 
             {{-- Updates thread --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Updates</h2>
+            <div class="panel">
+                <h2 class="panel-title">Updates</h2>
 
                 <div class="space-y-4 mb-6">
                     @forelse($workOrder->updates as $update)
@@ -97,13 +97,10 @@
                 <form method="POST" action="{{ route('manager.work-orders.updates.store', $workOrder) }}">
                     @csrf
                     <div class="flex gap-3">
-                        <textarea name="comment" rows="2"
-                                  placeholder="Add an update..."
-                                  class="flex-1 border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm resize-none">{{ old('comment') }}</textarea>
-                        <button type="submit"
-                                class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition text-sm self-end">
+                        <x-textarea name="comment" rows="2" placeholder="Add an update...">{{ old('comment') }}</x-textarea>
+                        <x-primary-button >
                             Add
-                        </button>
+                        </x-primary-button>
                     </div>
                     @error('comment') <p class="error-field-message">{{ $message }}</p> @enderror
                 </form>
@@ -112,8 +109,8 @@
 
         {{-- Sidebar --}}
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Property</h2>
+            <div class="panel">
+                <h2 class="panel-title">Property</h2>
                 <div class="text-sm space-y-2">
                     <p class="font-medium text-gray-900">{{ $workOrder->property->title }}</p>
                     <p class="text-gray-500">{{ $workOrder->property->address }}</p>

@@ -53,41 +53,10 @@
         </div>
     </div>
 
-    {{-- Quick actions --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    
+        {{-- Outstanding work orders --}}
         <div class="panel">
-            <h2 class="font-semibold text-gray-700 mb-4">Quick Actions</h2>
-            <div class="flex flex-col gap-3">
-                <a href="{{ route('manager.properties.create') }}"
-                   class="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition text-sm">
-                    + Add New Property
-                </a>
-                <a href="{{ route('manager.properties.index') }}"
-                   class="inline-flex items-center gap-2 border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50 transition text-sm">
-                    View All Properties
-                </a>
-            </div>
-        </div>
-
-        {{-- Recent properties --}}
-        <div class="panel">
-            <h2 class="font-semibold text-gray-700 mb-4">Recent Properties</h2>
-            @forelse(auth()->user()->properties->take(3) as $property)
-                <a href="{{ route('manager.properties.show', $property) }}"
-                   class="flex justify-between items-center py-2 border-b last:border-0 hover:text-indigo-600 transition text-sm">
-                    <span>{{ $property->title }}</span>
-                    <span class="text-xs px-2 py-1 rounded capitalize
-                        {{ $property->availability_status === 'available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                        {{ str_replace('_', ' ', $property->availability_status) }}
-                    </span>
-                </a>
-            @empty
-                <p class="text-gray-400 text-sm">No properties yet.</p>
-            @endforelse
-        </div>
-    </div>
-
-    <div class="panel">
             <h2 class="font-semibold text-gray-700 mb-4">Outstanding Work Orders</h2>
 
             @if($workOrders->isEmpty())
@@ -101,26 +70,20 @@
                             <tr>
                                 <th>Date Created</th>
                                 <th>Issue</th>
-                                <th>Property</th>
-                                <th>Raised By</th>
-                                <th>Priority</th>
-                                <th>Status</th>
+                                <th class="text-right">Priority</th>
+                                <th class="text-right">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($workOrders as $workOrder)
                                 <tr>
                                     <td>{{ $workOrder->created_at->format('d/m/Y') }}</td>
-                                    <td class="font-medium text-gray-900">
-                                        <a href="{{ route('manager.work-orders.show', $workOrder) }}">{{ $workOrder->title }}</a>
-                                    </td>
                                     <td>
-                                        {{ $workOrder->property->title }}
+                                        <a href="{{ route('manager.work-orders.show', $workOrder) }}" class="font-medium text-gray-900">{{ $workOrder->title }}</a>
+                                        <div class="text-gray-400">{{ $workOrder->property->title }}</div>
+                                        <div>By: <a href="{{ route('manager.users.index') }}" class="text-indigo-600">{{ $workOrder->raisedBy->first_name }} {{ $workOrder->raisedBy->last_name }}</a></div>
                                     </td>
-                                    <td>
-                                        {{ $workOrder->raisedBy->first_name }} {{ $workOrder->raisedBy->last_name }}
-                                    </td>
-                                    <td>
+                                    <td class="text-right">
                                         <span class="text-xs px-2 py-1 rounded capitalize
                                             {{ $workOrder->priority === 'urgent' ? 'bg-red-100 text-red-700' :
                                             ($workOrder->priority === 'high' ? 'bg-orange-100 text-orange-700' :
@@ -129,7 +92,7 @@
                                             {{ $workOrder->priority }}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="text-right">
                                         <span class="text-xs px-2 py-1 rounded capitalize
                                             {{ $workOrder->status === 'resolved' ? 'bg-green-100 text-green-700' :
                                             ($workOrder->status === 'open' ? 'bg-red-100 text-red-700' :
@@ -144,4 +107,54 @@
                 </div>
             @endif
         </div>
+
+        {{-- Recent properties --}}
+        <div class="panel">
+            <h2 class="font-semibold text-gray-700 mb-4">Recent Properties</h2>
+            <div>
+            @if ($recentProperties->isEmpty())
+                <p class="text-gray-400 text-sm">No properties yet.</p>
+            @else
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th class="text-right">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($recentProperties as $property)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('manager.properties.show', $property) }}"><span>{{ $property->title }}</span></a>
+                                </td>
+                                <td class="text-right">
+                                    <span class="text-xs px-2 py-1 rounded capitalize
+                                        {{ $property->availability_status === 'available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                        {{ str_replace('_', ' ', $property->availability_status) }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
+            </div>
+        </div>
+    </div>
+
+    {{-- Quick actions --}}
+    <div class="panel">
+        <h2 class="font-semibold text-gray-700 mb-4">Quick Actions</h2>
+        <div class="flex flex-col gap-3">
+            <a href="{{ route('manager.properties.create') }}"
+                class="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition text-sm">
+                + Add New Property
+            </a>
+            <a href="{{ route('manager.properties.index') }}"
+                class="inline-flex items-center gap-2 border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50 transition text-sm">
+                View All Properties
+            </a>
+        </div>
+    </div>
 @endsection

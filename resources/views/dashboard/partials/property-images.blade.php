@@ -1,6 +1,6 @@
 {{-- Existing images --}}
 @if(isset($property) && $property->images->count() > 0)
-    <div class="panel">
+    <div class="panel mb-4">
         <h2 class="panel-title">Current Images</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             @foreach($property->images->sortBy('sort_order') as $image)
@@ -47,7 +47,7 @@
 @endif
 
 {{-- Upload new images --}}
-<div class="panel">
+<div class="panel mb-6">
     <h2 class="panel-title">
         {{ isset($property) && $property->images->count() > 0 ? 'Add More Images' : 'Upload Images' }}
     </h2>

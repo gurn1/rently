@@ -109,7 +109,7 @@
 
             @include('dashboard.partials.property-images')
 
-            <div class="panel">
+            <div class="panel mb-6">
                 <h2 class="panel-title">Amenities</h2>
                 <div class="max-w-[50%]">
                     <x-checkbox-group

@@ -23,8 +23,8 @@
         <div class="lg:col-span-2 space-y-6">
 
             {{-- Account details --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Account Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Account Details</h2>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <p class="text-gray-400">Email</p>
@@ -63,8 +63,8 @@
 
             {{-- Properties (if manager) --}}
             @if($user->hasRole('property_manager'))
-                <div class="bg-white rounded-lg shadow p-6">
-                    <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Properties</h2>
+                <div class="panel">
+                    <h2 class="panel-title">Properties</h2>
                     @forelse($user->properties as $property)
                         <div class="flex justify-between items-center py-2 border-b last:border-0 text-sm">
                             <p class="font-medium text-gray-900">{{ $property->title }}</p>
@@ -81,10 +81,10 @@
 
             {{-- Leases (if tenant) --}}
             @if($user->hasRole('tenant'))
-                <div class="bg-white rounded-lg shadow p-6">
-                    <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Leases</h2>
+                <div class="panel">
+                    <h2 class="panel-title">Leases</h2>
                     @forelse($user->leases as $lease)
-                        <div class="flex justify-between items-center py-2 border-b last:border-0 text-sm">
+                        <div class="py-3 px-4 flex justify-between items-center py-2 rounded-lg border-gray-100 border text-sm mb-2 last:mb-0">
                             <div>
                                 <p class="font-medium text-gray-900">{{ $lease->property->title }}</p>
                                 <p class="text-gray-400 text-xs">

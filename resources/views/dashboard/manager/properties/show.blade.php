@@ -36,8 +36,8 @@
         <div class="lg:col-span-2 space-y-6">
 
             {{-- Property details --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Property Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Property Details</h2>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <p class="text-gray-400">Type</p>
@@ -71,13 +71,13 @@
                 </div>
 
                 @if($property->key_features)
-                    <div class="mt-4 pt-4 border-t">
+                    <div class="mt-4 pt-4 border-t border-gray-100">
                         <p class="text-gray-400 text-sm mb-2">Key Features</p>
                         <p class="text-sm text-gray-700">{!! nl2br(e($property->key_features)) !!}</p>
                     </div>
                 @endif
 
-                <div class="mt-4 pt-4 border-t">
+                <div class="mt-4 pt-4 border-t border-gray-100">
                     <p class="text-gray-400 text-sm mb-2">Description</p>
                     <p class="text-sm text-gray-700">{!! nl2br(e($property->description)) !!}</p>
                 </div>
@@ -85,8 +85,8 @@
 
             {{-- Amenities --}}
             @if($property->amenities->count() > 0)
-                <div class="bg-white rounded-lg shadow p-6">
-                    <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Amenities</h2>
+                <div class="panel">
+                    <h2 class="panel-title">Amenities</h2>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                         @foreach($property->amenities as $amenity)
                             <span class="bg-indigo-50 text-indigo-700 text-sm px-3 py-2 rounded">
@@ -98,25 +98,27 @@
             @endif
 
             {{-- Leases --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Leases</h2>
+            <div class="panel">
+                <h2 class="panel-title">Leases</h2>
                 @forelse($property->leases as $lease)
-                    <div class="flex justify-between items-center py-3 border-b last:border-0 text-sm">
-                        <div>
-                            <p class="font-medium text-gray-900">
-                                {{ $lease->tenant->first_name }} {{ $lease->tenant->last_name }}
-                            </p>
-                            <p class="text-gray-400 text-xs mt-1">
-                                {{ $lease->start_date }} — {{ $lease->end_date ?? 'Ongoing' }}
-                            </p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-medium text-indigo-600">£{{ number_format($lease->rent_amount, 0) }}/mo</p>
-                            <span class="text-xs px-2 py-1 rounded capitalize
-                                {{ $lease->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
-                                {{ $lease->status }}
-                            </span>
-                        </div>
+                    <div class="py-3 px-4 text-sm rounded-lg border-gray-100 border">
+                        <a href="{{ route('manager.leases.show', $lease) }}" class="flex justify-between items-center">
+                            <div>
+                                <p class="font-medium text-gray-900">
+                                    {{ $lease->tenant->first_name }} {{ $lease->tenant->last_name }}
+                                </p>
+                                <p class="text-gray-400 text-xs mt-1">
+                                    {{ $lease->start_date }} — {{ $lease->end_date ?? 'Ongoing' }}
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium text-indigo-600">£{{ number_format($lease->rent_amount, 0) }}/mo</p>
+                                <span class="text-xs px-2 py-1 rounded capitalize
+                                    {{ $lease->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
+                                    {{ $lease->status }}
+                                </span>
+                            </div>
+                        </a>
                     </div>
                 @empty
                     <p class="text-gray-400 text-sm">No leases for this property yet.</p>
@@ -126,8 +128,8 @@
 
         {{-- Sidebar --}}
         <div class="lg:col-span-1 space-y-6">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Quick Links</h2>
+            <div class="panel">
+                <h2 class="panel-title">Quick Links</h2>
                 <div class="flex flex-col gap-3 text-sm">
                     <a href="#" class="text-indigo-600 hover:underline">View Documents</a>
                     <a href="#" class="text-indigo-600 hover:underline">View Work Orders</a>

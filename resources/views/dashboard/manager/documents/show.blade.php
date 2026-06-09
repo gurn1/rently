@@ -12,23 +12,13 @@
             </a>
             <h1 class="text-2xl font-bold text-gray-900 mt-2">{{ $document->title }}</h1>
         </div>
-        <form method="POST"
-              action="{{ route('manager.documents.destroy', $document) }}"
-              onsubmit="return confirm('Are you sure?')">
-            @csrf
-            @method('DELETE')
-            <button type="submit"
-                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition text-sm">
-                Delete
-            </button>
-        </form>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Document Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Document Details</h2>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <p class="text-gray-400">Type</p>
@@ -75,13 +65,24 @@
         </div>
 
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">File</h2>
+            <div class="panel">
+                <h2 class="panel-title">File Actions</h2>
                 <a href="{{ Storage::url($document->path) }}"
                    target="_blank"
-                   class="block w-full text-center bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition text-sm">
+                   class="block w-full text-center bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition text-sm mb-4">
                     Download / View
                 </a>
+
+                <form method="POST"
+                    action="{{ route('manager.documents.destroy', $document) }}"
+                    onsubmit="return confirm('Are you sure?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                            class="block w-full text-center bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition text-sm">
+                        Delete
+                    </button>
+                </form>
             </div>
         </div>
     </div>

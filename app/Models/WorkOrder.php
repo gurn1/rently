@@ -13,6 +13,10 @@ class WorkOrder extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'resolved_at' => 'datetime',
+    ];
+
     /**
      * Belongs to a property
      */
