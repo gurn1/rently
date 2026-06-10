@@ -8,6 +8,7 @@ use App\Models\Conversation;
 use App\Models\WorkOrder;
 use App\Models\Document;
 use App\Models\Payment;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -48,7 +49,21 @@ class DashboardController extends Controller
             ->latest()
             ->take(4)
             ->get();
+
+        $propertyManager = $this->propertyManagerDetails();
     
-        return view('dashboard.tenant.dashboard', compact('activeLease', 'unreadMessages', 'openWorkOrders', 'pendingDocuments', 'failedPayments', 'payments', 'documents', 'workOrders'));
+        return view('dashboard.tenant.dashboard', compact('activeLease', 'unreadMessages', 'openWorkOrders', 'pendingDocuments', 'failedPayments', 'payments', 'documents', 'workOrders', 'propertyManager'));
+    }
+
+    public function propertyManagerDetails() {
+        $propertyManager = auth()->user()->propertyManager->first();
+
+        $contactDetails['profile_image'] = $propertyManager?->profile_image ? Storage::url($propertyManager->profile_image) : null;
+        $contactDetails['first_name'] = $propertyManager?->first_name;
+        $contactDetails['last_name'] = $propertyManager?->last_name;
+        $contactDetails['phone'] = $propertyManager?->phone;
+        $contactDetails['email'] = $propertyManager?->email;
+
+        return $contactDetails;
     }
 }
