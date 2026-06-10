@@ -61,7 +61,7 @@
                 </div>
 
                 @if($lease->termination_notes)
-                    <div class="mt-4 pt-4 border-t">
+                    <div class="mt-4 pt-4 border-t border-gray-100">
                         <p class="text-gray-400 text-sm mb-2">Termination Notes</p>
                         <p class="text-sm text-gray-700">{{ $lease->termination_notes }}</p>
                     </div>

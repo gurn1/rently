@@ -12,7 +12,7 @@
             <h1 class="text-2xl font-bold text-gray-900 mt-2">Payment Details</h1>
         </div>
 
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="panel">
             <div class="grid grid-cols-2 gap-4 text-sm">
                 <div>
                     <p class="text-gray-400">Tenant</p>
@@ -47,7 +47,7 @@
 
                 {{-- Status update --}}
                 @if($payment->status !== 'paid')
-                    <div class="pt-4 border-t mt-4">
+                    <div class="pt-4 border-t border-gray-100 mt-4">
                         <h3 class="font-medium text-gray-700 mb-3 text-sm">Update Status</h3>
                         <form method="POST"
                             action="{{ route(auth()->user()->routePrefix() . '.payments.update-status', $payment) }}"

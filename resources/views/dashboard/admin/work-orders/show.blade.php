@@ -18,8 +18,8 @@
 
         <div class="lg:col-span-2 space-y-6">
 
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Details</h2>
                 <div class="grid grid-cols-2 gap-4 text-sm mb-4">
                     <div>
                         <p class="text-gray-400">Priority</p>
@@ -57,15 +57,15 @@
                         </div>
                     @endif
                 </div>
-                <div class="pt-4 border-t">
+                <div class="pt-4 border-t border-gray-100">
                     <p class="text-gray-400 text-sm mb-2">Description</p>
                     <p class="text-sm text-gray-700">{!! nl2br(e($workOrder->description)) !!}</p>
                 </div>
             </div>
 
             {{-- Updates --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Updates</h2>
+            <div class="panel">
+                <h2 class="panel-title">Updates</h2>
                 <div class="space-y-4">
                     @forelse($workOrder->updates as $update)
                         <div class="flex gap-3">
@@ -91,8 +91,8 @@
 
         {{-- Sidebar --}}
         <div class="lg:col-span-1 space-y-6">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Property</h2>
+            <div class="panel">
+                <h2 class="panel-title">Property</h2>
                 <div class="text-sm space-y-2">
                     <p class="font-medium text-gray-900">{{ $workOrder->property->title }}</p>
                     <p class="text-gray-500">{{ $workOrder->property->address }}</p>
