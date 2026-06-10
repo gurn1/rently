@@ -82,7 +82,7 @@
                 @endif
 
                 @if($payment->status === 'pending' && $payment->payment_method === 'manual')
-                    <div class="pt-4 border-t">
+                    <div class="pt-4 border-t border-gray-100">
                         <form method="POST" action="{{ route('manager.payments.mark-paid', $payment) }}">
                             @csrf
                             <button type="submit"

@@ -15,8 +15,8 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Document Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Document Details</h2>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <p class="text-gray-400">Type</p>
@@ -55,8 +55,8 @@
         </div>
 
         <div class="lg:col-span-1 space-y-4">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Actions</h2>
+            <div class="panel">
+                <h2 class="panel-title">Actions</h2>
                 <div class="space-y-3">
                     <a href="{{ Storage::url($document->path) }}"
                        target="_blank"

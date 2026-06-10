@@ -17,8 +17,8 @@
         <div class="lg:col-span-2 space-y-6">
 
             {{-- Lease details --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Lease Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Lease Details</h2>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <p class="text-gray-400">Status</p>
@@ -47,8 +47,8 @@
             </div>
 
             {{-- Documents --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Documents</h2>
+            <div class="panel">
+                <h2 class="panel-title">Documents</h2>
                 @forelse($lease->documents as $document)
                     <div class="flex justify-between items-center py-2 border-b last:border-0 text-sm">
                         <div>
@@ -73,8 +73,8 @@
             </div>
 
             {{-- Work Orders --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Work Orders</h2>
+            <div class="panel">
+                <h2 class="panel-title">Work Orders</h2>
                 @forelse($lease->workOrders as $workOrder)
                     <div class="flex justify-between items-center py-2 border-b last:border-0 text-sm">
                         <p class="font-medium text-gray-900">{{ $workOrder->title }}</p>
@@ -93,8 +93,8 @@
 
         {{-- Sidebar --}}
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Property Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Property Details</h2>
                 <div class="text-sm space-y-2">
                     <p class="font-medium text-gray-900">{{ $lease->property->title }}</p>
                     <p class="text-gray-500">{{ $lease->property->address }}</p>

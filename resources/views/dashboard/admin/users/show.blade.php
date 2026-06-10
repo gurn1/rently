@@ -30,8 +30,8 @@
         <div class="lg:col-span-2 space-y-6">
 
             {{-- Account details --}}
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Account Details</h2>
+            <div class="panel">
+                <h2 class="panel-title">Account Details</h2>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <p class="text-gray-400">Email</p>
@@ -70,8 +70,8 @@
 
             {{-- Properties (if manager) --}}
             @if($user->hasRole('property_manager'))
-                <div class="bg-white rounded-lg shadow p-6">
-                    <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Properties</h2>
+                <div class="panel">
+                    <h2 class="panel-title">Properties</h2>
                     @forelse($user->properties as $property)
                         <div class="flex justify-between items-center py-2 border-b last:border-0 text-sm">
                             <p class="font-medium text-gray-900">{{ $property->title }}</p>
@@ -88,8 +88,8 @@
 
             {{-- Leases (if tenant) --}}
             @if($user->hasRole('tenant'))
-                <div class="bg-white rounded-lg shadow p-6">
-                    <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Leases</h2>
+                <div class="panel">
+                    <h2 class="panel-title">Leases</h2>
                     @forelse($user->leases as $lease)
                         <div class="flex justify-between items-center py-2 border-b last:border-0 text-sm">
                             <div>
@@ -114,8 +114,8 @@
 
             {{-- Assigned tenants (if manager) --}}
             @if($user->hasRole('property_manager'))
-                <div class="bg-white rounded-lg shadow p-6">
-                    <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Assigned Tenants</h2>
+                <div class="panel">
+                    <h2 class="panel-title">Assigned Tenants</h2>
 
                     @forelse($user->tenants as $tenant)
                         <div class="flex justify-between items-center py-2 border-b last:border-0 text-sm">
@@ -136,7 +136,7 @@
                     @endforelse
 
                     {{-- Assign tenant form --}}
-                    <div class="mt-4 pt-4 border-t">
+                    <div class="mt-4 pt-4 border-t border-gray-100">
                         <p class="text-sm font-medium text-gray-700 mb-3">Assign a Tenant</p>
                         <form method="POST" action="{{ route('admin.users.assign-tenant', $user) }}"
                               class="flex gap-3">
@@ -162,8 +162,8 @@
 
         {{-- Sidebar --}}
         <div class="lg:col-span-1 space-y-6">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="font-semibold text-gray-700 border-b pb-2 mb-4">Quick Actions</h2>
+            <div class="panel">
+                <h2 class="panel-title">Quick Actions</h2>
                 <div class="space-y-3 text-sm">
                     <a href="{{ route('admin.users.edit', $user) }}"
                        class="block w-full text-center border border-indigo-600 text-indigo-600 py-2 rounded hover:bg-indigo-50 transition">
