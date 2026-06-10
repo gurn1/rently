@@ -93,6 +93,51 @@
             @endif
         </div>
 
+        {{-- Recent payments --}}
+        <div class="panel">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="panel-title mb-0">Payment History</h2>
+                <a href="{{ route('tenant.payments.index') }}"
+                   class="text-xs text-indigo-600 hover:underline">View all</a>
+            </div>
+            <div>
+
+                @if ($payments->isEmpty())
+                    <p class="text-gray-400 text-sm">No payments yet.</p>
+                @else
+
+                    <table class="data-table small">
+                        <thead>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th class="text-right">Status</th>
+                        </thead>
+                        <tbody>
+                            @foreach ($payments as $payment)
+                                <tr>
+                                    <td class="text-gray-900 font-medium">
+                                        <a href="{{ route('tenant.payments.show', $payment) }}">{{ $payment->due_date?->format('d/m/Y') ?? '—' }}</a></td>
+                                    <td>
+                                        <a href="{{ route('tenant.payments.show', $payment) }}">£{{ number_format($payment->amount, 2) }}</a>
+                                    </td>
+                                    <td class="text-right">
+                                        <span class="text-xs px-2 py-1 rounded capitalize
+                                            {{ $payment->status === 'paid' ? 'bg-green-100 text-green-700' :
+                                            ($payment->status === 'failed' ? 'bg-red-100 text-red-700' :
+                                            ($payment->status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                                            'bg-gray-100 text-gray-600')) }}">
+                                            {{ $payment->status }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                @endif
+            </div>
+        </div>
+
         {{-- Documents awaiting signature --}}
         <div class="panel">
             <div class="flex justify-between items-center mb-4">

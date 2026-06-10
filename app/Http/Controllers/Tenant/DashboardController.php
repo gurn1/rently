@@ -33,6 +33,12 @@ class DashboardController extends Controller
             ->where('status', 'failed')
             ->count();
 
+        $payments = Payment::where('tenant_id', auth()->id())
+            ->with('lease.property')
+            ->latest()
+            ->take(5)
+            ->get();
+
         $documents = Document::where('tenant_id', auth()->id())
             ->latest()
             ->take(4)
@@ -43,6 +49,6 @@ class DashboardController extends Controller
             ->take(4)
             ->get();
     
-        return view('dashboard.tenant.dashboard', compact('activeLease', 'unreadMessages', 'openWorkOrders', 'pendingDocuments', 'failedPayments', 'documents', 'workOrders'));
+        return view('dashboard.tenant.dashboard', compact('activeLease', 'unreadMessages', 'openWorkOrders', 'pendingDocuments', 'failedPayments', 'payments', 'documents', 'workOrders'));
     }
 }
