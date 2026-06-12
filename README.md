@@ -1,58 +1,153 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Rently — Housing Rental Portal
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A full-stack housing rental portal built in Laravel 13. Supports three user types — Tenant, Property Manager, and Administrator — each with their own dashboard, permissions, and workflows.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tech Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Framework** — Laravel 13
+- **Auth scaffolding** — Laravel Breeze
+- **Roles & permissions** — Spatie Laravel Permission
+- **Payments** — Laravel Cashier + Stripe
+- **Frontend** — Blade + Tailwind CSS + Alpine.js
+- **Database** — MySQL
+- **Storage** — Laravel local disk (public + private)
+- **Queue** — Laravel queue (database driver)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP 8.4+
+- Composer
+- Node.js 18+
+- MySQL 8+
+- Stripe account (test mode keys)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Installation
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+**1. Clone the repository**
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <repo-url> rently
+cd rently
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+**2. Install PHP dependencies**
+```bash
+composer install
+```
 
-## Contributing
+**3. Install Node dependencies**
+```bash
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**4. Copy environment file**
+```bash
+cp .env.example .env
+```
 
-## Code of Conduct
+**5. Generate application key**
+```bash
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**6. Configure your `.env`**
+```env
+APP_NAME=Rently
+APP_URL=http://localhost:8000
 
-## Security Vulnerabilities
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=rently
+DB_USERNAME=root
+DB_PASSWORD=
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+STRIPE_KEY=pk_test_your_publishable_key
+STRIPE_SECRET=sk_test_your_secret_key
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+```
 
-## License
+**7. Run migrations and seed**
+```bash
+php artisan migrate --seed
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**8. Create storage symlink**
+```bash
+php artisan storage:link
+```
+
+**9. Build frontend assets**
+```bash
+npm run dev
+```
+
+**10. Start the development server**
+```bash
+composer run dev
+```
+
+---
+
+## Seeded Test Accounts
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@rently.com | password |
+| Property Manager | manager@rently.com | password |
+| Tenant | tenant@rently.com | password |
+
+---
+
+## Branch Structure
+
+| Branch | Purpose |
+|--------|---------|
+| `main` | Production ready code |
+| `develop` | Integration branch |
+| `feature/*` | Feature branches |
+| `fix/*` | Bug fix branches |
+
+Always branch from `develop`. Merge feature branches back into `develop`. Merge `develop` into `main` for releases.
+
+---
+
+## Key Commands
+
+```bash
+# Run all migrations fresh with seed data
+php artisan migrate:fresh --seed
+
+# Send payment due reminders (run daily via scheduler)
+php artisan payments:send-reminders
+
+# Extend payments for open-ended leases (run monthly via scheduler)
+php artisan payments:extend-leases
+
+# Run the scheduler locally
+php artisan schedule:work
+
+# Forward Stripe webhooks locally
+stripe listen --forward-to localhost:8000/stripe/webhook
+```
+
+---
+
+## Documentation Index
+
+| File | Contents |
+|------|---------|
+| [schema.md](docs/schema.md) | Database tables, columns, ERD diagram |
+| [models.md](docs/models.md) | Eloquent models and relationships |
+| [routes.md](docs/routes.md) | Routes, middleware, naming conventions |
+| [controllers.md](docs/controllers.md) | Controller index by role |
+| [policies.md](docs/policies.md) | Authorization policies per model |
+| [notifications.md](docs/notifications.md) | Notification classes and triggers |
+| [views.md](docs/views.md) | View structure and layout system |
+| [payments.md](docs/payments.md) | Payment flow, Stripe integration, scheduled commands |
+| [features.md](docs/features.md) | Feature progress and branch reference |
