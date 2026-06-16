@@ -3,7 +3,7 @@
 @section('title', 'Request Payment')
 
 @section('content')
-    <div class="max-w-2xl mx-auto">
+    <div>
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-2xl font-bold text-gray-900">Request Payment</h1>
             <a href="{{ route('admin.payments.index') }}"
