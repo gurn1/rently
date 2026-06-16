@@ -59,8 +59,8 @@
                                 <div x-show="open"
                                     @click.away="open = false"
                                     x-transition
-                                    class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border z-50">
-                                    <div class="px-4 py-3 border-b flex justify-between items-center">
+                                    class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-md border-gray-100 border z-50">
+                                    <div class="px-4 pt-3 pb-1 flex justify-between items-center">
                                         <p class="font-semibold text-sm text-gray-700">Notifications</p>
                                         @if($unreadCount > 0)
                                             <form method="POST" action="{{ route('notifications.markAllRead') }}">
@@ -72,9 +72,11 @@
                                         @endif
                                     </div>
 
+                                    <div class="flex flex-col gap-2 my-2 px-3">
+
                                     @forelse($notifications as $notification)
                                         <a href="{{ route('notifications.read', $notification->id) }}"
-                                        class="block px-4 py-3 border-b last:border-0 hover:bg-gray-50 transition">
+                                        class="block px-4 py-3 bg-gray-100 hover:bg-gray-50 rounded-lg transition">
                                             <p class="text-sm text-gray-800">{{ $notification->data['message'] }}</p>
                                             <p class="text-xs text-gray-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
                                         </a>
@@ -83,6 +85,7 @@
                                             No new notifications
                                         </div>
                                     @endforelse
+                                    </div>
                                 </div>
                             </div>
 
