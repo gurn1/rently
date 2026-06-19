@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Document;
 use App\Models\Lease;
 use App\Models\Property;
+use App\Models\User;
 use App\Notifications\DocumentUploadedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -29,11 +30,11 @@ class DocumentController extends Controller
      */
     public function create()
     {
-        $tenants = auth()->user()->tenants;
-        $properties = Property::where('property_manager_id', auth()->id())->get();
-        $leases = Lease::whereHas('property', function ($query) {
-            $query->where('properties.property_manager_id', auth()->id());
-        })->with(['tenant', 'property'])->get();
+        $tenants = User::role('tenant')
+            ->with(['roles', 'profile'])
+            ->get();
+        $properties = Property::all();
+        $leases = Lease::with(['tenant', 'property'])->get();
 
         $documentTypes = [
             'tenancy_agreement' => 'Tenancy Agreement',
@@ -67,7 +68,7 @@ class DocumentController extends Controller
         // Store the file
         $path = $request->file('file')->store('documents', 'private');
 
-        Document::create([
+        $document = Document::create([
             'uploaded_by'        => auth()->id(),
             'tenant_id'          => $validated['tenant_id'],
             'property_id'        => $validated['property_id'] ?? null,
@@ -113,7 +114,7 @@ class DocumentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Document $document)
     {
         $this->authorize('delete', $document);
 

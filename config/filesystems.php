@@ -38,6 +38,12 @@ return [
             'report' => false,
         ],
 
+        'private' => [
+            'driver' => 'local',
+            'root'   => storage_path('app/private'),
+            'visibility' => 'private',
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -75,12 +81,6 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
-    ],
-
-    'private' => [
-        'driver' => 'local',
-        'root'   => storage_path('app/private'),
-        'visibility' => 'private',
     ],
 
 ];

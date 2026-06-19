@@ -61,6 +61,14 @@
                             <td>
                                 <a href="{{ route('admin.documents.show', $document) }}"
                                    class="text-indigo-600 hover:underline">View</a>
+
+                                <form method="POST"
+                                    action="{{ route('admin.documents.destroy', $document) }}"
+                                    onsubmit="return confirm('Are you sure you want to delete this document?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-500 hover:underline">Delete</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
