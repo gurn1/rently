@@ -92,7 +92,7 @@
 </div>
 
 <div class="flex flex-col mt-12">
-    <span class="uppercase text-[#5C6267]">You</span>
+    <span class="uppercase text-[#5C6267] pl-4">You</span>
     <a href="{{ route($rolePrefix . '.profile.edit') }}" 
     class="navigation-item {{ request()->routeIs($rolePrefix . '.profile.*') ? 'navigation-item-active' : '' }}">
         <span class="material-symbols-outlined">account_circle</span> Profile
