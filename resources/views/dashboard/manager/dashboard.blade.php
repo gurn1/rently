@@ -12,40 +12,46 @@
 
     {{-- Stats --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="panel flex gap-5">
-            <div class="aspect-square w-[20%] bg-properties rounded-full flex items-center justify-center">
-                <a href="{{ route('manager.properties.index') }}"><span class="material-symbols-outlined font-light !text-5xl text-white">other_houses</span></a>
+        <div class="panel gap-5">
+            <div class="text-gray-500 font-semibold">
+                <a class="flex items-center" href="{{ route('manager.properties.index') }}">
+                    <span class="material-symbols-outlined font-light text-properties">other_houses</span>
+                    <p class="pl-2">Properties</p>
+                </a>
             </div>
-            <div class="flex flex-col justify-center">
+            <div class="flex flex-col mt-3">
                 <a href="{{ route('manager.properties.index') }}">
-                    <p class="text-xl font-semibold leading-none mb-1">Properties</p>
-                    <p class="text-4xl font-bold text-gray-700 leading-none">
+                    <p class="text-5xl font-bold text-gray-700 leading-none">
                         {{ auth()->user()->properties->count() }}
                     </p>
                 </a>
             </div>
         </div>
-        <div class="panel flex gap-5">
-            <div class="aspect-square w-[20%] bg-users rounded-full flex items-center justify-center">
-                <a href="{{ route('manager.users.index') }}"><span class="material-symbols-outlined font-light !text-5xl text-white">groups</span></a>
+        <div class="panel gap-5">
+            <div class="text-gray-500 font-semibold">
+                <a class="flex items-center" href="{{ route('manager.users.index') }}">
+                    <span class="material-symbols-outlined font-light text-users">groups</span>
+                    <p class="pl-2">Tenants</p>
+                </a>
             </div>
-            <div class="flex flex-col justify-center">
+            <div class="flex flex-col mt-3">
                 <a href="{{ route('manager.users.index') }}">
-                    <p class="text-xl font-semibold leading-none mb-1">Tenants</p>
-                    <p class="text-4xl font-bold text-gray-700 leading-none">
+                    <p class="text-5xl font-bold text-gray-700 leading-none">
                         {{ auth()->user()->tenants->count() }}
                     </p>
                 </a>
             </div>
         </div>
-        <div class="panel flex gap-5">
-            <div class="aspect-square w-[20%] bg-leases rounded-full flex items-center justify-center">
-                <a href="{{ route('manager.leases.index') }}"><span class="material-symbols-outlined font-light !text-5xl text-white">contract</span></a>
+        <div class="panel gap-5">
+            <div class="text-gray-500 font-semibold">
+                <a class="flex items-center" href="{{ route('manager.leases.index') }}">
+                    <span class="material-symbols-outlined font-light text-leases">contract</span>
+                    <p class="pl-2">Leases</p>
+                </a>
             </div>
-            <div class="flex flex-col justify-center">
+            <div class="flex flex-col mt-3">
                 <a href="{{ route('manager.leases.index') }}">
-                    <p class="text-xl font-semibold leading-none mb-1">Leases</p>
-                    <p class="text-4xl font-bold text-gray-700 leading-none">
+                    <p class="text-5xl font-bold text-gray-700 leading-none">
                         {{ auth()->user()->properties->sum(fn($p) => $p->leases->where('status', 'active')->count()) }}
                     </p>
                 </a>
