@@ -1,5 +1,5 @@
 <div class="flex flex-col">
-    <span class="uppercase text-[#5C6267]">Main</span>
+    <span class="uppercase text-[#5C6267] pl-4">Main</span>
 
     <a href="{{ route($rolePrefix . '.dashboard') }}"
     class="navigation-item {{ request()->routeIs( $rolePrefix .'.dashboard') ? 'navigation-item-active' : '' }}">
@@ -92,15 +92,14 @@
 </div>
 
 <div class="flex flex-col mt-12">
-    <span class="uppercase text-[#5C6267]">You</span>
+    <span class="uppercase text-[#5C6267] pl-4">You</span>
     <a href="{{ route($rolePrefix . '.profile.edit') }}" 
     class="navigation-item {{ request()->routeIs($rolePrefix . '.profile.*') ? 'navigation-item-active' : '' }}">
         <span class="material-symbols-outlined">account_circle</span> Profile
     </a>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit"
-                class="navigation-item">
+        <button type="submit" class="navigation-item w-full">
             <span class="material-symbols-outlined">logout</span> Logout
         </button>
     </form>

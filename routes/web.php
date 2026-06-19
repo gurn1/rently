@@ -260,10 +260,13 @@ Route::middleware(['auth', 'role:admin'])
             ]);
 
         Route::resource('documents', AdminDocumentController::class)
-            ->only(['index', 'show'])
+            ->only(['index', 'show', 'create', 'store', 'destroy'])
             ->names([
-                'index' => 'documents.index',
-                'show'  => 'documents.show',
+                'index'   => 'documents.index',
+                'show'    => 'documents.show',
+                'create'  => 'documents.create',
+                'store'   => 'documents.store',
+                'destroy' => 'documents.destroy',
             ]);
 
         Route::get('/profile', [UserProfileController::class, 'edit'])->name('profile.edit');
