@@ -35,9 +35,7 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::resource('/', PropertyController::class)->only(['index', 'show']);
 
 Route::resource('properties', PropertyController::class)->only(['index', 'show']);
 
