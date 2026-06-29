@@ -10,56 +10,60 @@
 
     {{-- Top stats --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="panel flex gap-5">
-            <div class="w-[30%]">
-                <div class="aspect-square w-full bg-users rounded-full flex items-center justify-center">
-                    <a href="{{ route('admin.users.index') }}"><span class="material-symbols-outlined font-light !text-5xl text-white">groups</span></a>
-                </div>
+        <div class="panel gap-5">
+            <div class="text-gray-500 font-semibold">
+                <a class="flex items-center" href="{{ route('admin.users.index') }}">
+                    <span class="material-symbols-outlined text-users font-light">groups</span>
+                    <p class="leading-none pl-2">Total Users</p>
+                </a>
             </div>
-            <div class="flex flex-col justify-center">
-                <p class="text-xl font-semibold leading-none mb-1">Total Users</p>
-                <p class="text-4xl font-bold text-gray-700 leading-none">{{ $userStats['total'] }}</p>
+            <div class="flex flex-col mt-3">
+                <p class="text-5xl font-bold text-gray-700 leading-none">{{ $userStats['total'] }}</p>
                 <div class="mt-1 flex gap-3 text-xs text-gray-400">
                     <span>{{ $userStats['tenants'] }} tenants</span>
                     <span>{{ $userStats['managers'] }} managers</span>
                 </div>
             </div>
         </div>
-        <div class="panel flex gap-5">
-            <div class="w-[30%]">
-                <div class="aspect-square w-full bg-properties rounded-full flex items-center justify-center">
-                    <a href="{{ route('admin.properties.index') }}"><span class="material-symbols-outlined font-light !text-5xl text-white">other_houses</span></a>
-                </div>
+        <div class="panel gap-5">
+            <div class="text-gray-500 font-semibold">
+                <a class="flex items-center" href="{{ route('admin.properties.index') }}">
+                    <span class="material-symbols-outlined text-properties font-light">other_houses</span>
+                    <p class="leading-none pl-2">Properties</p>
+                </a>
             </div>
-            <div class="flex flex-col justify-center">
-                <p class="text-xl font-semibold leading-none mb-1">Properties</p>
-                <p class="text-4xl font-bold text-gray-700 leading-none">{{ $propertyStats['total'] }}</p>
+            <div class="flex flex-col mt-3">
+                <p class="text-5xl font-bold text-gray-700 leading-none">{{ $propertyStats['total'] }}</p>
                 <div class="mt-1 flex gap-3 text-xs">
                     <span class="text-green-600">{{ $propertyStats['available'] }} available</span>
                     <span class="text-red-500">{{ $propertyStats['occupied'] }} occupied</span>
                 </div>
             </div>
         </div>
-        <div class="panel flex gap-5">
-            <div class="w-[30%]">
-                <div class="aspect-square w-full bg-leases rounded-full flex items-center justify-center">
-                    <a href="{{ route('admin.leases.index') }}"><span class="material-symbols-outlined font-light !text-5xl text-white">contract</span></a>
-                </div>
+        <div class="panel gap-5">
+            <div class="text-gray-500 font-semibold">
+                <a class="flex items-center" href="{{ route('admin.leases.index') }}">
+                    <span class="material-symbols-outlined font-light text-leases">contract</span>
+                    <p class="pl-2">Active Leases</p>
+                </a>
             </div>
-            <div class="flex flex-col justify-center">
-                <p class="text-xl font-semibold leading-none mb-1">Active Leases</p>
-                <p class="text-4xl font-bold text-gray-700 leading-none">{{ $leaseStats['active'] }}</p>
+            <div class="flex flex-col mt-3">
+                <p class="text-5xl font-bold text-gray-700 leading-none">{{ $leaseStats['active'] }}</p>
                 <div class="mt-1 flex gap-3 text-xs text-gray-400">
                     <span>{{ $leaseStats['pending'] }} pending</span>
                     <span>{{ $leaseStats['terminated'] }} terminated</span>
                 </div>
             </div>
         </div>
-        <div class="panel">
-            <p class="text-xl font-semibold leading-none mb-1">Revenue This Month</p>
-            <p class="text-4xl font-bold text-green-600 leading-none">£{{ number_format($paymentStats['this_month'], 0) }}</p>
-            <div class="mt-1 flex gap-3 text-xs text-gray-400">
-                <span>£{{ number_format($paymentStats['total_collected'], 0) }} total</span>
+        <div class="panel gap-5">
+            <div class="flex items-center">
+                <a href="{{ route('admin.payments.index') }}"><p class="text-gray-500 font-semibold flex items-center">Revenue This Month</p></a>
+            </div>
+            <div class="flex flex-col mt-3">
+                <p class="text-5xl font-bold text-green-600 leading-none">£{{ number_format($paymentStats['this_month'], 0) }}</p>
+                <div class="mt-1 flex gap-3 text-xs text-gray-400">
+                    <span>£{{ number_format($paymentStats['total_collected'], 0) }} total</span>
+                </div>
             </div>
         </div>
     </div>

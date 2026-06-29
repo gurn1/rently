@@ -29,7 +29,7 @@
     <body class="bg-gray-100 text-gray-900 antialiased min-h-screen">
 
         <main class="flex h-full">
-            <aside class="primary-navigation w-sm bg-dark px-12 pt-10 min-h-screen">
+            <aside class="primary-navigation w-sm bg-dark px-8 pt-10 min-h-screen">
                 <div class="mb-8 w-[120px]">
                     @include('partials.logo', ['path' => route($rolePrefix . '.dashboard')])
                 </div>

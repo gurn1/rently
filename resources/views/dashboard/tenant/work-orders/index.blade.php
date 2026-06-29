@@ -60,9 +60,9 @@
                         </span>
                     </td>
                     <td>
-                        <x-outline-button href="{{ route('tenant.work-orders.show', $workOrder) }}"
-                            class="text-indigo-600 border-indigo-600"
-                        >View</x-outline-button>
+                        <a href="{{ route('tenant.work-orders.show', $workOrder) }}"
+                            class="text-indigo-600"
+                        >View</a>
                     </td>
                 </tr>
             @endforeach
