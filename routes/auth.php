@@ -10,10 +10,11 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 Route::middleware('guest')->group(function () {
 
-    if (cache()->remember('enable_frontend_registration', 60, fn() => setting('enable_frontend_registration', false))) {
+    if (Schema::hasTable('cache') && cache()->remember('enable_frontend_registration', 60, fn() => setting('enable_frontend_registration', false))) {
         Route::get('register', [RegisteredUserController::class, 'create'])
             ->name('register');
         Route::post('register', [RegisteredUserController::class, 'store']);
