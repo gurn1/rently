@@ -23,7 +23,7 @@ class ConversationController extends Controller
     public function show(Conversation $conversation)
     {
         // Ensure the manager owns this conversation
-        if ($conversation->property_manager_id !== auth()->id()) {
+        if ((int) $conversation->property_manager_id !== (int) auth()->id()) {
             abort(403);
         }
 
