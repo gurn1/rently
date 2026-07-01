@@ -58,8 +58,10 @@
                             </td>
                             <td>
                                 <div class="flex items-center gap-3">
-                                    <a href="{{ route('manager.properties.edit', $property) }}"
-                                       class="text-indigo-600 hover:underline">Edit</a>
+                                    <a href="{{ route('manager.properties.show', $property) }}"
+                                    class="font-medium text-gray-900 hover:text-indigo-600 transition">
+                                        View
+                                    </a>
                                 </div>
                             </td>
                         </tr>

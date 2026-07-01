@@ -12,12 +12,6 @@
             <h1 class="text-2xl font-bold text-gray-900 mt-2">{{ $property->title }}</h1>
             <p class="text-gray-500">{{ $property->address }}</p>
         </div>
-        <div class="flex gap-3">
-            <a href="{{ route('manager.properties.edit', $property) }}"
-               class="border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50 transition text-sm">
-                Edit Property
-            </a>
-        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
