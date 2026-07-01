@@ -9,11 +9,6 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    protected $casts = [
-        'tenant_id' => 'integer',
-        'property_manager_id' => 'integer',
-    ];
-
     public function store(Request $request, Conversation $conversation)
     {
         $validated = $request->validate([

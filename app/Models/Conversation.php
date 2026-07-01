@@ -53,6 +53,8 @@ class Conversation extends Model
     {
         return [
             'last_message_at' => 'datetime',
+            'tenant_id' => 'integer',
+            'property_manager_id' => 'integer',
         ];
     }
 
