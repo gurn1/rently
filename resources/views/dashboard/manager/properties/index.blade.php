@@ -60,13 +60,6 @@
                                 <div class="flex items-center gap-3">
                                     <a href="{{ route('manager.properties.edit', $property) }}"
                                        class="text-indigo-600 hover:underline">Edit</a>
-                                    <form method="POST"
-                                          action="{{ route('manager.properties.destroy', $property) }}"
-                                          onsubmit="return confirm('Are you sure you want to delete this property?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:underline">Delete</button>
-                                    </form>
                                 </div>
                             </td>
                         </tr>

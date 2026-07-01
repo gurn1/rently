@@ -17,16 +17,6 @@
                class="border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50 transition text-sm">
                 Edit Property
             </a>
-            <form method="POST"
-                  action="{{ route('manager.properties.destroy', $property) }}"
-                  onsubmit="return confirm('Are you sure?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition text-sm">
-                    Delete
-                </button>
-            </form>
         </div>
     </div>
 
