@@ -98,9 +98,9 @@ composer run dev
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@rently.com | password |
-| Property Manager | manager@rently.com | password |
-| Tenant | tenant@rently.com | password |
+| Admin | admin@rently.com | P9A8116A |
+| Property Manager | manager@rently.com | 54T59K19 |
+| Tenant | tenant@rently.com | B148FI5A |
 
 ---
 
