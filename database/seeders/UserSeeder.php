@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             'first_name' => 'Admin',
             'last_name' => 'User',
             'email' => 'admin@rently.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('P9A8116A'),
         ]);
         $admin->assignRole('admin');
         $admin->profile()->create([
@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             'first_name' => 'John',
             'last_name' => 'Smith',
             'email' => 'manager@rently.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('54T59K19'),
         ]);
         $manager->assignRole('property_manager');
         $manager->profile()->create([
@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
             'first_name' => 'Jane',
             'last_name' => 'Doe',
             'email' => 'tenant@rently.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('B148FI5A'),
         ]);
         $tenant->assignRole('tenant');
         $tenant->profile()->create([
