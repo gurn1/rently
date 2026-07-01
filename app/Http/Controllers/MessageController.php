@@ -24,7 +24,7 @@ class MessageController extends Controller
             abort(403);
         }
 
-        Message::create([
+        $message = Message::create([
             'conversation_id' => $conversation->id,
             'sender_id'       => $user->id,
             'body'            => $validated['body'],
